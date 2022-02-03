@@ -1,9 +1,9 @@
 package net.cosmogrp.storage.model.meta;
 
-import com.sun.istack.internal.Nullable;
 import net.cosmogrp.storage.model.AnnotationHelper;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.exception.NoSuchModelDataException;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Responsible for storing metadata about a model.
