@@ -2,6 +2,7 @@ package net.cosmogrp.storage.mongo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
+import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.mongo.meta.MongoModelMeta;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.exception.NoSuchModelDataException;
@@ -29,13 +30,15 @@ public class MongoModelServiceProvider {
         this.database = database;
     }
 
-    public <T extends Model> MongoModelService<T> create(Class<T> modelClass)
-            throws NoSuchModelDataException {
+    public <T extends Model> MongoModelService<T> create(
+            Class<T> modelClass,
+            ModelService<T> cacheModelService
+    ) throws NoSuchModelDataException {
         MongoModelMeta<T> modelMeta = new MongoModelMeta<>(modelClass);
 
         return new MongoModelService<>(
                 executor,
-                modelMeta,
+                cacheModelService,
                 JacksonMongoCollection.builder()
                         .withObjectMapper(mapper)
                         .build(
