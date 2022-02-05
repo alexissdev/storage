@@ -3,7 +3,6 @@ package net.cosmogrp.storage.mongo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.mongo.meta.MongoModelMeta;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.exception.NoSuchModelDataException;
 import org.bson.UuidRepresentation;
@@ -32,10 +31,9 @@ public class MongoModelServiceProvider {
 
     public <T extends Model> MongoModelService<T> create(
             Class<T> modelClass,
+            String collectionName,
             ModelService<T> cacheModelService
     ) throws NoSuchModelDataException {
-        MongoModelMeta<T> modelMeta = new MongoModelMeta<>(modelClass);
-
         return new MongoModelService<>(
                 executor,
                 cacheModelService,
@@ -43,7 +41,7 @@ public class MongoModelServiceProvider {
                         .withObjectMapper(mapper)
                         .build(
                                 mongoClient, database,
-                                modelMeta.getCollectionName(),
+                                collectionName,
                                 modelClass, UuidRepresentation.JAVA_LEGACY
                         )
         );

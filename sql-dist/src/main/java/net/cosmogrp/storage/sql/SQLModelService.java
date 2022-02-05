@@ -3,10 +3,10 @@ package net.cosmogrp.storage.sql;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
+import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.sql.connection.SQLClient;
 import net.cosmogrp.storage.sql.identity.SQLMapSerializer;
 import net.cosmogrp.storage.sql.identity.Table;
-import net.cosmogrp.storage.sql.meta.SQLModelMeta;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.RowMapper;
@@ -26,7 +26,7 @@ public class SQLModelService<T extends Model>
 
     public SQLModelService(
             Executor executor,
-            SQLModelMeta<T> modelMeta,
+            ModelMeta<T> modelMeta,
             ModelService<T> cacheModelService,
             SQLClient sqlClient,
             RowMapper<T> rowMapper,
@@ -36,7 +36,11 @@ public class SQLModelService<T extends Model>
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
         this.mapSerializer = mapSerializer;
-        this.table = modelMeta.getTable();
+        this.table = (Table) modelMeta.getProperty("table");
+
+        if (table == null) {
+            throw new IllegalArgumentException("Table not found");
+        }
 
         try (Handle handle = connection.open()) {
             handle.execute(

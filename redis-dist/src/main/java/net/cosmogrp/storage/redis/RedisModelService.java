@@ -3,8 +3,8 @@ package net.cosmogrp.storage.redis;
 import com.google.gson.Gson;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
+import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.redis.connection.RedisCache;
-import net.cosmogrp.storage.redis.meta.RedisModelMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class RedisModelService<T extends Model> extends RemoteModelService<T> {
 
     public RedisModelService(
             Executor executor,
-            RedisModelMeta<T> modelMeta,
+            ModelMeta<T> modelMeta,
             Gson gson,
             RedisCache redisCache
     ) {
@@ -28,7 +28,7 @@ public class RedisModelService<T extends Model> extends RemoteModelService<T> {
         this.gson = gson;
         this.type = modelMeta.getType();
         this.redisCache = redisCache;
-        this.tableName = modelMeta.getTableName();
+        this.tableName = (String) modelMeta.getProperty("tableName");
     }
 
     @Override
