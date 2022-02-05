@@ -52,7 +52,7 @@ public class RedisModelService<T extends Model> extends RemoteModelService<T> {
 
     @Override
     protected List<T> internalFindAll() {
-        List<String> values = redisCache.getAll(tableName);
+        List<String> values = redisCache.getAllValues(tableName);
         List<T> models = new ArrayList<>();
 
         for (String value : values) {
