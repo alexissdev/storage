@@ -1,4 +1,4 @@
-package net.cosmogrp.storage.meta;
+package net.cosmogrp.storage.mongo.meta;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,8 +1,8 @@
-package net.cosmogrp.storage;
+package net.cosmogrp.storage.mongo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
-import net.cosmogrp.storage.meta.MongoModelMeta;
+import net.cosmogrp.storage.mongo.meta.MongoModelMeta;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.exception.NoSuchModelDataException;
 import org.bson.UuidRepresentation;

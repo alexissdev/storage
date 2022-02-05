@@ -1,4 +1,4 @@
-package net.cosmogrp.storage.meta;
+package net.cosmogrp.storage.mongo.meta;
 
 import net.cosmogrp.storage.model.AnnotationHelper;
 import net.cosmogrp.storage.model.Model;

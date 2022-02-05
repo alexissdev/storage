@@ -1,4 +1,4 @@
-package net.cosmogrp.storage;
+package net.cosmogrp.storage.mongo;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
