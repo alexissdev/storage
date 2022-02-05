@@ -28,7 +28,7 @@ public class RedisModelService<T extends Model> extends RemoteModelService<T> {
         this.gson = gson;
         this.type = modelMeta.getType();
         this.redisCache = redisCache;
-        this.tableName = (String) modelMeta.getProperty("tableName");
+        this.tableName = (String) modelMeta.getProperty("redis-table");
     }
 
     @Override

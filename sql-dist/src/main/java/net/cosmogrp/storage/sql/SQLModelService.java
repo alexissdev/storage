@@ -36,7 +36,7 @@ public class SQLModelService<T extends Model>
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
         this.mapSerializer = mapSerializer;
-        this.table = (Table) modelMeta.getProperty("table");
+        this.table = (Table) modelMeta.getProperty("sql-table");
 
         if (table == null) {
             throw new IllegalArgumentException("Table not found");
