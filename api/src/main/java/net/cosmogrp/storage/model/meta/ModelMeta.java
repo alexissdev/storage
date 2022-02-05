@@ -22,9 +22,15 @@ public class ModelMeta<T extends Model> {
     public ModelMeta(Class<T> type) throws NoSuchModelDataException {
         this.type = type;
 
-        this.cachedStrategy = AnnotationHelper.getAnnotation(
+        Cached cached = AnnotationHelper.getAnnotation(
                 type, Cached.class, false
-        ).value();
+        );
+
+        if (cached != null) {
+            cachedStrategy = cached.value();
+        } else {
+            cachedStrategy = null;
+        }
     }
 
     public Class<T> getType() {
