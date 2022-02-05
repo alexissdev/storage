@@ -11,8 +11,7 @@ public class RedisModelMeta<T extends Model>
     private final String tableName;
 
     public RedisModelMeta(
-            Class<T> type,
-            String tableName
+            Class<T> type
     ) throws NoSuchModelDataException {
         super(type);
 
