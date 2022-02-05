@@ -3,8 +3,6 @@ package net.cosmogrp.storage.dist;
 import net.cosmogrp.storage.AsyncModelService;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.Cached;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -19,22 +17,10 @@ public abstract class RemoteModelService<T extends Model>
 
     public RemoteModelService(
             Executor executor,
-            ModelMeta<T> modelMeta
+            ModelService<T> cacheModelService
     ) {
         super(executor);
-
-        Cached.Strategy strategy = modelMeta.getCachedStrategy();
-
-        // same models cannot be cached
-        if (strategy == null) {
-            this.cacheModelService = null;
-        } else {
-            if (strategy == Cached.Strategy.LOCAL) {
-                this.cacheModelService = new LocalModelService<>();
-            } else {
-                this.cacheModelService = null;
-            }
-        }
+        this.cacheModelService = cacheModelService;
     }
 
     @Override

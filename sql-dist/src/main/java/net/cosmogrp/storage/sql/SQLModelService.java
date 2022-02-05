@@ -1,5 +1,6 @@
 package net.cosmogrp.storage.sql;
 
+import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.sql.connection.SQLClient;
@@ -26,11 +27,12 @@ public class SQLModelService<T extends Model>
     public SQLModelService(
             Executor executor,
             SQLModelMeta<T> modelMeta,
+            ModelService<T> cacheModelService,
             SQLClient sqlClient,
             RowMapper<T> rowMapper,
             SQLMapSerializer<T> mapSerializer
     ) {
-        super(executor, modelMeta);
+        super(executor, cacheModelService);
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
         this.mapSerializer = mapSerializer;

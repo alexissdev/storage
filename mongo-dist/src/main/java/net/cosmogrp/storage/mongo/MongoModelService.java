@@ -2,9 +2,9 @@ package net.cosmogrp.storage.mongo;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import org.jetbrains.annotations.Nullable;
 import org.mongojack.JacksonMongoCollection;
 
@@ -19,10 +19,10 @@ public class MongoModelService<T extends Model>
 
     public MongoModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
+            ModelService<T> cacheModelService,
             JacksonMongoCollection<T> collection
     ) {
-        super(executor, modelMeta);
+        super(executor, cacheModelService);
         this.collection = collection;
     }
 
