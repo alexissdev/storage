@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.exception.NoSuchModelDataException;
 import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 
@@ -33,7 +32,7 @@ public class MongoModelServiceProvider {
             Class<T> modelClass,
             String collectionName,
             ModelService<T> cacheModelService
-    ) throws NoSuchModelDataException {
+    ) {
         return new MongoModelService<>(
                 executor,
                 cacheModelService,
