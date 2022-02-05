@@ -26,6 +26,7 @@ public class SQLClient {
         private int port;
         private String database;
         private int maximumPoolSize = 0;
+        private String driverClassName;
 
         public Builder(String sqlProtocol) {
             this.sqlProtocol = sqlProtocol;
@@ -62,12 +63,21 @@ public class SQLClient {
             return this;
         }
 
+        public Builder setDriverClassName(String driverClassName) {
+            this.driverClassName = driverClassName;
+            return this;
+        }
+
         public SQLClient build() {
             hikariConfig.setJdbcUrl(String.format(
                     JDBC_FORMAT,
                     sqlProtocol, host,
                     port, database
             ));
+
+            if (driverClassName != null) {
+                hikariConfig.setDriverClassName(driverClassName);
+            }
 
             hikariConfig.setMaximumPoolSize(maximumPoolSize);
             return new SQLClient(new HikariDataSource(hikariConfig));
