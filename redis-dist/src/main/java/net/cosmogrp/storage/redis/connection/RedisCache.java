@@ -6,6 +6,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RedisCache {
 
@@ -20,6 +21,12 @@ public class RedisCache {
     public List<String> getAllValues(String table) {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.hvals(makeTable(table));
+        }
+    }
+
+    public Set<String> getAllKeys(String table) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.hkeys(makeTable(table));
         }
     }
 
