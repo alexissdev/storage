@@ -1,5 +1,6 @@
 package net.cosmogrp.storage.redis.connection;
 
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -21,13 +22,25 @@ public class RedisCache {
         }
     }
     
-    public void set(String table, String key, String value) {
+    public void set(
+            String table, String key,
+            String value, long seconds
+    ) {
         try (Jedis jedis = jedisPool.getResource()) {
-            jedis.hset(makeTable(table), key, value);
+            String tableName = makeTable(table);
+            jedis.hset(tableName, key, value);
+
+            if (seconds > 0) {
+                jedis.expire(tableName, seconds);
+            }
         }
     }
 
-    public String get(String table, String key) {
+    public void set(String table, String key, String value) {
+        set(table, key, value, -1);
+    }
+
+    public @Nullable String get(String table, String key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.hget(makeTable(table), key);
         }
