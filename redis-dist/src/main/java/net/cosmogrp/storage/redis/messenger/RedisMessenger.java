@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
 
 public class RedisMessenger implements Messenger {
 
+    private final String parentChannel;
     private final String serverId;
     private final Gson gson;
 
@@ -30,6 +31,7 @@ public class RedisMessenger implements Messenger {
             JedisPool messengerPool,
             Jedis listenerConnection
     ) {
+        this.parentChannel = parentChannel;
         this.serverId = serverId;
         this.gson = gson;
         this.messengerPool = messengerPool;
@@ -50,7 +52,8 @@ public class RedisMessenger implements Messenger {
 
         if (channel == null) {
             channel = new RedisChannel<>(
-                    serverId, name, type, this, messengerPool, gson
+                    parentChannel, serverId, name, type,
+                    this, messengerPool, gson
             );
 
             channels.put(name, channel);

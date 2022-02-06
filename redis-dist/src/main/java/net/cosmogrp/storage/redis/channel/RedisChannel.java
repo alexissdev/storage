@@ -14,6 +14,7 @@ import java.util.Set;
 
 public class RedisChannel<T> implements Channel<T> {
 
+    private final String parentChannel;
     private final String serverId;
     private final String name;
     private final TypeToken<T> type;
@@ -24,11 +25,13 @@ public class RedisChannel<T> implements Channel<T> {
     private final Gson gson;
 
     public RedisChannel(
-            String serverId, String name,
-            TypeToken<T> type, Messenger messenger,
+            String parentChannel, String serverId,
+            String name, TypeToken<T> type,
+            Messenger messenger,
             JedisPool jedisPool,
             Gson gson
     ) {
+        this.parentChannel = parentChannel;
         this.serverId = serverId;
         this.name = name;
         this.type = type;
@@ -69,7 +72,7 @@ public class RedisChannel<T> implements Channel<T> {
         String json = objectToSend.toString();
 
         try (Jedis jedis = jedisPool.getResource()) {
-            jedis.publish(name, json);
+            jedis.publish(parentChannel, json);
         }
 
         return this;
