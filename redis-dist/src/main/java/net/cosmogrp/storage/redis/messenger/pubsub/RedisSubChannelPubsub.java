@@ -42,7 +42,7 @@ public class RedisSubChannelPubsub extends JedisPubSub {
         String serverId = jsonMessage.get("server").getAsString();
 
         // if the message is from the server we're listening to
-        if (!serverId.equals(this.serverId)) {
+        if (serverId.equals(this.serverId)) {
             return;
         }
 
