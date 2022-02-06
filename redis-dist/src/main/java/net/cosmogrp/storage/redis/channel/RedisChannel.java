@@ -66,9 +66,10 @@ public class RedisChannel<T> implements Channel<T> {
         }
 
         objectToSend.add("object", jsonElement);
+        String json = objectToSend.toString();
 
         try (Jedis jedis = jedisPool.getResource()) {
-            jedis.publish(name, objectToSend.toString());
+            jedis.publish(name, json);
         }
 
         return this;
