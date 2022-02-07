@@ -1,7 +1,6 @@
 package net.cosmogrp.storage.redis;
 
 import com.google.gson.Gson;
-import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.meta.ModelMeta;
@@ -19,7 +18,6 @@ public class RedisModelService<T extends Model>
             Executor executor,
             ModelMeta<T> modelMeta,
             Gson gson,
-            ModelService<T> cacheModelService,
             RedisCache redisCache
     ) {
         super(executor);
