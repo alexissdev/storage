@@ -3,7 +3,7 @@ package net.cosmogrp.storage.mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.RemoteModelService;
+import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 import org.mongojack.JacksonMongoCollection;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class MongoModelService<T extends Model>
-        extends RemoteModelService<T> {
+        extends CachedRemoteModelService<T> {
 
     private final JacksonMongoCollection<T> collection;
 
@@ -32,6 +32,11 @@ public class MongoModelService<T extends Model>
                 Filters.eq("_id", model.getId()),
                 model, new ReplaceOptions().upsert(true)
         );
+    }
+
+    @Override
+    protected void internalDelete(T model) {
+        collection.deleteOne(Filters.eq("_id", model.getId()));
     }
 
     @Override

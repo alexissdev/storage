@@ -1,7 +1,7 @@
 package net.cosmogrp.storage.sql;
 
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.RemoteModelService;
+import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.sql.connection.SQLClient;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class SQLModelService<T extends Model>
-        extends RemoteModelService<T> {
+        extends CachedRemoteModelService<T> {
 
     private final Jdbi connection;
     private final RowMapper<T> rowMapper;
@@ -59,6 +59,17 @@ public class SQLModelService<T extends Model>
                     .define("COLUMNS", table.getColumns())
                     .define("VALUES", table.getParameters())
                     .bindMap(mapSerializer.serialize(model))
+                    .execute();
+        }
+    }
+
+    @Override
+    protected void internalDelete(T model) {
+        try (Handle handle = connection.open()) {
+            handle.createUpdate("DELETE FROM <TABLE> WHERE <COLUMN> = :n")
+                    .define("TABLE", table.getName())
+                    .define("COLUMN", table.getPrimaryColumn())
+                    .bind("n", model.getId())
                     .execute();
         }
     }
