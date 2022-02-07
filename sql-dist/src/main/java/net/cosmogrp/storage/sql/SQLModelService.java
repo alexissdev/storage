@@ -46,7 +46,7 @@ public class SQLModelService<T extends Model>
             handle.execute(
                     "CREATE TABLE IF NOT EXISTS "
                             + table.getName() +
-                            "(" + table.getDeclaration() + ")"
+                            " (" + table.getDeclaration() + ")"
             );
         }
     }
