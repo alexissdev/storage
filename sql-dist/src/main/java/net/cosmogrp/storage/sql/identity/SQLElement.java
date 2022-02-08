@@ -16,6 +16,8 @@ public interface SQLElement {
 
     String getColumn();
 
+    boolean hasReference();
+
     DataType getType();
 
     List<SQLConstraint> getConstraints();

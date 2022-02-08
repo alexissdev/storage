@@ -15,11 +15,20 @@ public class MySQLElement implements SQLElement {
     private final List<SQLConstraint> constraints;
 
     private String declaration;
+    private ForeignKey foreignKey;
 
     public MySQLElement(
             String column, DataType type,
+            ForeignKey foreignKey,
             SQLConstraint... constraints
     ) {
+        this.column = column;
+        this.type = type;
+        this.constraints = Arrays.asList(constraints);
+        this.foreignKey = foreignKey;
+    }
+
+    public MySQLElement(String column, DataType type, SQLConstraint... constraints) {
         this.column = column;
         this.type = type;
         this.constraints = Arrays.asList(constraints);
@@ -63,6 +72,10 @@ public class MySQLElement implements SQLElement {
                 .append(constraint.toSql())
                 .append(" "));
 
+        if (hasReference()) {
+            builder.append(foreignKey.toSql());
+        }
+
         declaration = builder.toString();
 
         return declaration;
@@ -74,6 +87,11 @@ public class MySQLElement implements SQLElement {
     }
 
     @Override
+    public boolean hasReference() {
+        return foreignKey != null;
+    }
+
+    @Override
     public DataType getType() {
         return type;
     }
@@ -81,6 +99,73 @@ public class MySQLElement implements SQLElement {
     @Override
     public List<SQLConstraint> getConstraints() {
         return constraints;
+    }
+
+    public static class ForeignKey {
+
+        private static final String TEMPLATE = "FOREIGN KEY REFERENCES %s(%s) %s %s";
+
+        private final String tableReference;
+        private final String elementReference;
+
+        private final ForeignTrigger trigger;
+        private final ForeignAction action;
+
+        public ForeignKey(
+                String tableReference,
+                String elementReference,
+                ForeignTrigger trigger,
+                ForeignAction action
+        ) {
+            this.tableReference = tableReference;
+            this.elementReference = elementReference;
+            this.trigger = trigger;
+            this.action = action;
+        }
+
+        public String toSql() {
+            return String.format(
+                    TEMPLATE, tableReference, elementReference,
+                    trigger.sql, action.sql
+            );
+        }
+    }
+
+    public enum ForeignTrigger {
+
+        DELETE("ON DELETE"),
+        UPDATE("ON UPDATE");
+
+        private final String sql;
+
+        ForeignTrigger(String sql) {
+            this.sql = sql;
+        }
+
+        public String getSql() {
+            return sql;
+        }
+    }
+
+    public enum ForeignAction {
+
+        RESTRICT("RESTRICT"),
+        CASCADE("CASCADE"),
+        NULL("SET NULL"),
+        NOTHING("NO ACTION"),
+        DEFAULT("SET DEFAULT")
+
+        ;
+
+        private final String sql;
+
+        ForeignAction(String sql) {
+            this.sql = sql;
+        }
+
+        public String getSql() {
+            return sql;
+        }
     }
 
 }
