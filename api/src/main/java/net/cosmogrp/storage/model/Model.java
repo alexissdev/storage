@@ -16,8 +16,4 @@ public interface Model {
      */
     String getId();
 
-    boolean isDeleted();
-
-    void delete();
-
 }
