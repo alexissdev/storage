@@ -6,6 +6,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
+import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.model.meta.ModelMeta;
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class MongoModelService<T extends MongoModel>
+public class MongoModelService<T extends DocumentCodec & Model>
         extends CachedRemoteModelService<T> {
 
     private final MongoCollection<Document> mongoCollection;
