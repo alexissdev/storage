@@ -108,12 +108,6 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
-    public void deleteSync(T model) {
-        model.delete();
-        uploadSync(model);
-    }
-
-    @Override
     public T deleteSync(String id) {
         T model = getOrFindSync(id);
 
