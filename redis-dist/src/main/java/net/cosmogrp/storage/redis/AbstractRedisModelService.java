@@ -17,6 +17,7 @@ public class AbstractRedisModelService<T extends Model>
     private final Class<T> type;
     private final RedisCache redisCache;
     private final String tableName;
+    private final int expireAfterSave;
 
     public AbstractRedisModelService(
             Executor executor,
@@ -29,13 +30,23 @@ public class AbstractRedisModelService<T extends Model>
         this.type = modelMeta.getType();
         this.redisCache = redisCache;
         this.tableName = (String) modelMeta.getProperty("redis-table");
+
+        Integer expireAfterSave = (Integer) modelMeta
+                .getProperty("redis-expire");
+
+        if (expireAfterSave == null) {
+            this.expireAfterSave = -1;
+        } else {
+            this.expireAfterSave = expireAfterSave;
+        }
     }
 
     @Override
     protected void internalSave(T model) {
         redisCache.set(
                 tableName, model.getId(),
-                gson.toJson(model)
+                gson.toJson(model),
+                expireAfterSave
         );
     }
 
