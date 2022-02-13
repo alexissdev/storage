@@ -64,7 +64,7 @@ public class MongoModelService<T extends DocumentCodec & Model>
             return null;
         }
 
-        return mongoModelParser.parse(document);
+        return mongoModelParser.parse(DocumentReader.create(document));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class MongoModelService<T extends DocumentCodec & Model>
         List<T> models = new ArrayList<>();
 
         for (Document document : documents) {
-            models.add(mongoModelParser.parse(document));
+            models.add(mongoModelParser.parse(DocumentReader.create(document)));
         }
 
         return models;
