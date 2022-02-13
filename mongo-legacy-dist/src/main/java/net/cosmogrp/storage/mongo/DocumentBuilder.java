@@ -33,7 +33,7 @@ public class DocumentBuilder {
 
     public DocumentBuilder write(
             String field,
-            Collection<DocumentCodec> children
+            Collection<? extends DocumentCodec> children
     ) {
         List<Document> documents = new ArrayList<>(children.size());
         for (DocumentCodec child : children) {
