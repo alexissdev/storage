@@ -57,17 +57,16 @@ public class DocumentReader {
 
     public <K, V extends DocumentCodec> Map<K, V> readMap(
             String field,
-            Function<DocumentReader, K> keyParser,
+            Function<V, K> keyParser,
             Function<DocumentReader, V> valueParser
     ) {
         List<Document> documents = document.getList(field, Document.class);
         Map<K, V> map = new HashMap<>(documents.size());
 
         for (Document document : documents) {
-            map.put(
-                    keyParser.apply(DocumentReader.create(document)),
-                    valueParser.apply(DocumentReader.create(document))
-            );
+            V value = valueParser.apply(DocumentReader.create(document));
+
+            map.put(keyParser.apply(value), value);
         }
 
         return map;
