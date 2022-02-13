@@ -16,7 +16,7 @@ public class DocumentBuilder {
         document = new Document();
     }
 
-    public DocumentBuilder writeUuid(String field, UUID uuid) {
+    public DocumentBuilder write(String field, UUID uuid) {
         document.append(field, uuid.toString());
         return this;
     }
@@ -31,7 +31,7 @@ public class DocumentBuilder {
         return this;
     }
 
-    public DocumentBuilder writeEmbedded(
+    public DocumentBuilder write(
             String field,
             Collection<DocumentCodec> children
     ) {
