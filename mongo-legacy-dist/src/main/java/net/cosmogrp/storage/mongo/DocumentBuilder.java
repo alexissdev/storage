@@ -26,6 +26,11 @@ public class DocumentBuilder {
         return this;
     }
 
+    public DocumentBuilder write(String field, DocumentCodec child) {
+        document.append(field, child.toDocument());
+        return this;
+    }
+
     public DocumentBuilder writeEmbedded(
             String field,
             Collection<DocumentCodec> children
