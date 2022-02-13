@@ -6,6 +6,7 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class DocumentBuilder {
@@ -37,6 +38,19 @@ public class DocumentBuilder {
     ) {
         List<Document> documents = new ArrayList<>(children.size());
         for (DocumentCodec child : children) {
+            documents.add(child.toDocument());
+        }
+
+        document.append(field, documents);
+        return this;
+    }
+
+    public DocumentBuilder write(
+            String field,
+            Map<?, ? extends DocumentCodec> children
+    ) {
+        List<Document> documents = new ArrayList<>(children.size());
+        for (DocumentCodec child : children.values()) {
             documents.add(child.toDocument());
         }
 

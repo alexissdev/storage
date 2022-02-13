@@ -3,8 +3,10 @@ package net.cosmogrp.storage.mongo;
 import org.bson.Document;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -51,6 +53,24 @@ public class DocumentReader {
 
     public DocumentReader readChild(String field) {
         return DocumentReader.create(document.get(field, Document.class));
+    }
+
+    public <K, V extends DocumentCodec> Map<K, V> readMap(
+            String field,
+            Function<DocumentReader, K> keyParser,
+            Function<DocumentReader, V> valueParser
+    ) {
+        List<Document> documents = document.getList(field, Document.class);
+        Map<K, V> map = new HashMap<>(documents.size());
+
+        for (Document document : documents) {
+            map.put(
+                    keyParser.apply(DocumentReader.create(document)),
+                    valueParser.apply(DocumentReader.create(document))
+            );
+        }
+
+        return map;
     }
 
     public <T extends DocumentCodec> Set<T> readChildren(
