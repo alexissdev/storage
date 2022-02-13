@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 public class DocumentReader {
@@ -14,6 +15,10 @@ public class DocumentReader {
 
     private DocumentReader(Document document) {
         this.document = document;
+    }
+
+    public UUID readUuid(String field) {
+        return UUID.fromString(readString(field));
     }
 
     public <T> Set<T> readSet(String field, Class<T> clazz) {
