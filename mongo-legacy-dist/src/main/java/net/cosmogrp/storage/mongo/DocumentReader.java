@@ -44,6 +44,10 @@ public class DocumentReader {
         return document.getList(field, clazz);
     }
 
+    public Document readChild(String field) {
+        return document.get(field, Document.class);
+    }
+
     public <T extends DocumentCodec> Set<T> readChildren(
             String field,
             Function<DocumentReader, T> parser
