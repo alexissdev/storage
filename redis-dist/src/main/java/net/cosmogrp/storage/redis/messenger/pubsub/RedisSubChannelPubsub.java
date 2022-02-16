@@ -53,7 +53,7 @@ public class RedisSubChannelPubsub extends JedisPubSub {
             String targetServer = targetServerElement.getAsString();
 
             // if the message isn't for this server, ignore it
-            if (!targetServer.equals(serverId)) {
+            if (!targetServer.equals(this.serverId)) {
                 return;
             }
         }
