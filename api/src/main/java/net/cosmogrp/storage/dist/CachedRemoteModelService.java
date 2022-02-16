@@ -104,4 +104,12 @@ public abstract class CachedRemoteModelService<T extends Model>
         return model;
     }
 
+    public void saveInCache(T model) {
+        cacheModelService.saveSync(model);
+    }
+
+    public void deleteInCache(T model) {
+        cacheModelService.deleteSync(model);
+    }
+
 }
