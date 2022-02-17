@@ -35,6 +35,20 @@ public class DocumentReader {
         return document.getString(field);
     }
 
+    public double readDouble(String field) {
+        return document.getDouble(field);
+    }
+
+    public float readFloat(String field) {
+        Double value = document.getDouble(field);
+
+        if (value == null) {
+            return 0;
+        }
+
+        return (float) ((double) value);
+    }
+
     public long readLong(String field) {
         return document.getLong(field);
     }
