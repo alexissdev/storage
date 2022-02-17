@@ -1,6 +1,7 @@
 package net.cosmogrp.storage.mongo;
 
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -65,8 +66,17 @@ public class DocumentReader {
         return document.getList(field, clazz);
     }
 
-    public DocumentReader readChild(String field) {
-        return DocumentReader.create(document.get(field, Document.class));
+    public <T extends DocumentCodec> @Nullable T readChild(
+            String field,
+            Function<DocumentReader, T> parser
+    ) {
+        Document child = document.get(field, Document.class);
+
+        if (child == null) {
+            return null;
+        }
+
+        return parser.apply(DocumentReader.create(child));
     }
 
     public <K, V extends DocumentCodec> Map<K, V> readMap(
