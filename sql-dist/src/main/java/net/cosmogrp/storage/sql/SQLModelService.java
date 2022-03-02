@@ -76,11 +76,15 @@ public class SQLModelService<T extends Model>
 
     @Override
     protected @Nullable T internalFind(String id) {
+        return find(table.getPrimaryColumn(), id);
+    }
+
+    public @Nullable T find(String column, String key) {
         try (Handle handle = connection.open()) {
             return handle.select("SELECT * FROM <TABLE> WHERE <COLUMN> = :n")
                     .define("TABLE", table.getName())
-                    .define("COLUMN", table.getPrimaryColumn())
-                    .bind("n", id)
+                    .define("COLUMN", column)
+                    .bind("n", key)
                     .map(rowMapper)
                     .findFirst()
                     .orElse(null);
@@ -89,12 +93,16 @@ public class SQLModelService<T extends Model>
 
     @Override
     protected List<T> internalFindAll() {
+        return findAll(table.getPrimaryColumn());
+    }
+
+    public List<T> findAll(String column) {
         try (Handle handle = connection.open()) {
             List<T> models = new ArrayList<>();
 
             for (T model : handle.select("SELECT * FROM <TABLE>")
                     .define("TABLE", table.getName())
-                    .define("COLUMN", table.getPrimaryColumn())
+                    .define("COLUMN", column)
                     .map(rowMapper)
             ) {
                 models.add(model);
