@@ -23,5 +23,5 @@ mongo-driver = { module = "org.mongodb:mongodb-driver-sync", name = "mongo-drive
 
 jedis = { group = "redis.clients", name = "jedis", version.ref = "jedis" }
 
-hikari = { group = "com.zaxxer:HikariCP", name = "hikari", version.ref = "hikari" }
+hikari = { module = "com.zaxxer:HikariCP", name = "hikari", version.ref = "hikari" }
 jdbi = { module = "org.jdbi:jdbi3-core", name = "jdbi", version.ref = "jdbi" }
