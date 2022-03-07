@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class LocalModelService<T extends Model>
         implements ModelService<T> {
@@ -38,16 +37,6 @@ public class LocalModelService<T extends Model>
     @Override
     public void saveSync(T model) {
         cache.put(model.getId(), model);
-    }
-
-    @Override
-    public void uploadSync(T model) {
-        cache.put(model.getId(), model);
-    }
-
-    @Override
-    public void uploadAllSync(Consumer<T> preUploadAction) {
-        // nothing is supposed to be done here
     }
 
     @Override
