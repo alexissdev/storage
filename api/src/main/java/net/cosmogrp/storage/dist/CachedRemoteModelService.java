@@ -2,8 +2,11 @@ package net.cosmogrp.storage.dist;
 
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.model.Model;
+import net.cosmogrp.storage.model.meta.ModelMeta;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
@@ -12,13 +15,17 @@ public abstract class CachedRemoteModelService<T extends Model>
         extends CachedAsyncModelService<T> {
 
     protected final ModelService<T> cacheModelService;
+    protected final ResolverRegistry<T> resolverRegistry;
 
-    public CachedRemoteModelService(
+    @SuppressWarnings("unchecked") public CachedRemoteModelService(
             Executor executor,
-            ModelService<T> cacheModelService
+            ModelService<T> cacheModelService,
+            ModelMeta<T> modelMeta
     ) {
         super(executor);
         this.cacheModelService = cacheModelService;
+        this.resolverRegistry = (ResolverRegistry<T>)
+                modelMeta.getProperty("resolvers");
     }
 
     @Override
@@ -34,18 +41,23 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
-    public List<T> findSync(String field, String value) {
-        return null;
-    }
-
-    @Override
     public @Nullable T getSync(String id) {
         return cacheModelService.findSync(id);
     }
 
     @Override
     public List<T> getSync(String field, String value) {
-        return null;
+        Iterable<String> ids = resolverRegistry.resolve(field, value);
+        List<T> models = new ArrayList<>();
+
+        for (String id : ids) {
+            T model = getOrFindSync(id);
+            if (model != null) {
+                models.add(model);
+            }
+        }
+
+        return models;
     }
 
     @Override
@@ -61,7 +73,13 @@ public abstract class CachedRemoteModelService<T extends Model>
 
     @Override
     public List<T> getOrFindSync(String field, String value) {
-        return null;
+        List<T> models = getSync(field, value);
+
+        if (models.isEmpty()) {
+            models = findSync(field, value);
+        }
+
+        return models;
     }
 
     @Override
@@ -83,6 +101,7 @@ public abstract class CachedRemoteModelService<T extends Model>
     @Override
     public void saveSync(T model) {
         cacheModelService.saveSync(model);
+        resolverRegistry.bind(model);
 
         internalSave(model);
     }
@@ -90,6 +109,7 @@ public abstract class CachedRemoteModelService<T extends Model>
     @Override
     public void uploadSync(T model) {
         cacheModelService.deleteSync(model);
+        resolverRegistry.unbind(model);
         internalSave(model);
     }
 
@@ -105,6 +125,7 @@ public abstract class CachedRemoteModelService<T extends Model>
     @Override
     public void deleteSync(T model) {
         cacheModelService.deleteSync(model);
+        resolverRegistry.unbind(model);
         internalDelete(model);
     }
 
@@ -132,8 +153,6 @@ public abstract class CachedRemoteModelService<T extends Model>
     protected abstract void internalDelete(T model);
 
     protected abstract @Nullable T internalFind(String id);
-
-    protected abstract List<T> internalFind(String field, String value);
 
     protected abstract List<T> internalFindAll();
 
