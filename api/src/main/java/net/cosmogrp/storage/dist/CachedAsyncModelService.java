@@ -1,5 +1,6 @@
-package net.cosmogrp.storage;
+package net.cosmogrp.storage.dist;
 
+import net.cosmogrp.storage.CachedModelService;
 import net.cosmogrp.storage.model.Model;
 
 import java.util.List;

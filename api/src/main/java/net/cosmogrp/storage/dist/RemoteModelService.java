@@ -1,6 +1,5 @@
 package net.cosmogrp.storage.dist;
 
-import net.cosmogrp.storage.AsyncModelService;
 import net.cosmogrp.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 
