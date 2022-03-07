@@ -22,7 +22,7 @@ public class CachedRedisModelService<T extends Model>
             ModelService<T> cacheModelService,
             RedisCache redisCache
     ) {
-        super(executor, cacheModelService);
+        super(executor, cacheModelService, modelMeta);
         delegate = new AbstractRedisModelService<>(
                 executor, modelMeta, gson, redisCache
         );
@@ -46,5 +46,10 @@ public class CachedRedisModelService<T extends Model>
     @Override
     protected List<T> internalFindAll() {
         return delegate.internalFindAll();
+    }
+
+    @Override
+    public List<T> findSync(String field, String value) {
+        return delegate.findSync(field, value);
     }
 }

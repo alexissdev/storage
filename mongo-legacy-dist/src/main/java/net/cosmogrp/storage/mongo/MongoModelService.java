@@ -28,7 +28,7 @@ public class MongoModelService<T extends DocumentCodec & Model>
             MongoDatabase database,
             MongoModelParser<T> mongoModelParser
     ) {
-        super(executor, cacheModelService);
+        super(executor, cacheModelService, modelMeta);
 
         String collectionName = (String) modelMeta.getProperty("collection");
 
@@ -76,6 +76,20 @@ public class MongoModelService<T extends DocumentCodec & Model>
 
         for (Document document : documents) {
             models.add(mongoModelParser.parse(DocumentReader.create(document)));
+        }
+
+        return models;
+    }
+
+    @Override
+    public List<T> findSync(String field, String value) {
+        List<T> models = new ArrayList<>();
+
+        for (Document document : mongoCollection
+                .find(Filters.eq(field, value))) {
+            models.add(mongoModelParser
+                    .parse(DocumentReader
+                            .create(document)));
         }
 
         return models;

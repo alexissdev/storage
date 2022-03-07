@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 public class SQLModelService<T extends Model>
         extends CachedRemoteModelService<T> {
@@ -32,7 +33,7 @@ public class SQLModelService<T extends Model>
             RowMapper<T> rowMapper,
             SQLMapSerializer<T> mapSerializer
     ) {
-        super(executor, cacheModelService);
+        super(executor, cacheModelService, modelMeta);
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
         this.mapSerializer = mapSerializer;
@@ -76,39 +77,40 @@ public class SQLModelService<T extends Model>
 
     @Override
     protected @Nullable T internalFind(String id) {
-        return find(table.getPrimaryColumn(), id);
-    }
+        List<T> models = findSync(table.getPrimaryColumn(), id);
 
-    public @Nullable T find(String column, String key) {
-        try (Handle handle = connection.open()) {
-            return handle.select("SELECT * FROM <TABLE> WHERE <COLUMN> = :n")
-                    .define("TABLE", table.getName())
-                    .define("COLUMN", column)
-                    .bind("n", key)
-                    .map(rowMapper)
-                    .findFirst()
-                    .orElse(null);
+        if (models.isEmpty()) {
+            return null;
         }
+
+        return models.get(0);
     }
 
     @Override
     protected List<T> internalFindAll() {
-        return findAll(table.getPrimaryColumn());
-    }
-
-    public List<T> findAll(String column) {
         try (Handle handle = connection.open()) {
             List<T> models = new ArrayList<>();
 
             for (T model : handle.select("SELECT * FROM <TABLE>")
                     .define("TABLE", table.getName())
-                    .define("COLUMN", column)
                     .map(rowMapper)
             ) {
                 models.add(model);
             }
 
             return models;
+        }
+    }
+
+    @Override
+    public List<T> findSync(String field, String value) {
+        try (Handle handle = connection.open()) {
+            return handle.select("SELECT * FROM <TABLE> WHERE <COLUMN> = :n")
+                    .define("TABLE", table.getName())
+                    .define("COLUMN", field)
+                    .bind("n", value)
+                    .map(rowMapper)
+                    .collect(Collectors.toList());
         }
     }
 }

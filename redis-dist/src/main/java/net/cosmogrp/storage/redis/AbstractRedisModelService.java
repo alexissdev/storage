@@ -8,6 +8,7 @@ import net.cosmogrp.storage.redis.connection.RedisCache;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -76,5 +77,16 @@ public class AbstractRedisModelService<T extends Model>
         }
 
         return models;
+    }
+
+    @Override
+    public List<T> findSync(String field, String value) {
+        if (!field.equals(ID_FIELD)) {
+            throw new IllegalArgumentException(
+                    "Only ID field is supported for sync find"
+            );
+        }
+
+        return Collections.singletonList(internalFind(value));
     }
 }

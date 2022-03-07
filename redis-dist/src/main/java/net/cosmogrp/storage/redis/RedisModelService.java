@@ -45,4 +45,9 @@ public class RedisModelService<T extends Model>
     protected List<T> internalFindAll() {
         return delegate.internalFindAll();
     }
+
+    @Override
+    public List<T> findSync(String field, String value) {
+        return delegate.findSync(field, value);
+    }
 }
