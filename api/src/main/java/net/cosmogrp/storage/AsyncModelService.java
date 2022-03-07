@@ -20,6 +20,10 @@ public abstract class AsyncModelService<T extends Model>
         return CompletableFuture.supplyAsync(() -> findSync(id), executor);
     }
 
+    public CompletableFuture<List<T>> find(String field, String value) {
+        return CompletableFuture.supplyAsync(() -> findSync(field, value), executor);
+    }
+
     public CompletableFuture<List<T>> findAll() {
         return CompletableFuture.supplyAsync(this::findAllSync, executor);
     }
