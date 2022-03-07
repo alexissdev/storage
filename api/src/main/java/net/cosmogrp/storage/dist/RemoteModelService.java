@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 public abstract class RemoteModelService<T extends Model>
         extends AsyncModelService<T> {
@@ -19,21 +18,6 @@ public abstract class RemoteModelService<T extends Model>
     }
 
     @Override
-    public @Nullable T getSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public @Nullable T getOrFindSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public List<T> getAllSync() {
-        return internalFindAll();
-    }
-
-    @Override
     public List<T> findAllSync() {
         return internalFindAll();
     }
@@ -41,16 +25,6 @@ public abstract class RemoteModelService<T extends Model>
     @Override
     public void saveSync(T model) {
         internalSave(model);
-    }
-
-    @Override
-    public void uploadSync(T model) {
-        internalSave(model);
-    }
-
-    @Override
-    public void uploadAllSync(Consumer<T> preUploadAction) {
-        // do nothing
     }
 
     @Override
@@ -76,4 +50,5 @@ public abstract class RemoteModelService<T extends Model>
     protected abstract @Nullable T internalFind(String id);
 
     protected abstract List<T> internalFindAll();
+
 }
