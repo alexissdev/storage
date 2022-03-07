@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public abstract class CachedRemoteModelService<T extends Model>
-        extends RemoteModelService<T> {
+        extends CachedAsyncModelService<T> {
 
     protected final ModelService<T> cacheModelService;
 
@@ -34,8 +34,18 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
+    public List<T> findSync(String field, String value) {
+        return null;
+    }
+
+    @Override
     public @Nullable T getSync(String id) {
-        return cacheModelService.getSync(id);
+        return cacheModelService.findSync(id);
+    }
+
+    @Override
+    public List<T> getSync(String field, String value) {
+        return null;
     }
 
     @Override
@@ -50,8 +60,13 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
+    public List<T> getOrFindSync(String field, String value) {
+        return null;
+    }
+
+    @Override
     public List<T> getAllSync() {
-        return cacheModelService.getAllSync();
+        return cacheModelService.findAllSync();
     }
 
     @Override
@@ -80,7 +95,7 @@ public abstract class CachedRemoteModelService<T extends Model>
 
     @Override
     public void uploadAllSync(Consumer<T> preUploadAction) {
-        List<T> models = cacheModelService.getAllSync();
+        List<T> models = cacheModelService.findAllSync();
         for (T model : models) {
             preUploadAction.accept(model);
             uploadSync(model);
@@ -111,5 +126,15 @@ public abstract class CachedRemoteModelService<T extends Model>
     public void deleteInCache(T model) {
         cacheModelService.deleteSync(model);
     }
+
+    protected abstract void internalSave(T model);
+
+    protected abstract void internalDelete(T model);
+
+    protected abstract @Nullable T internalFind(String id);
+
+    protected abstract List<T> internalFind(String field, String value);
+
+    protected abstract List<T> internalFindAll();
 
 }
