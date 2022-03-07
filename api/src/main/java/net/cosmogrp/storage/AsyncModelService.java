@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 public abstract class AsyncModelService<T extends Model>
         implements ModelService<T> {
 
-    private final Executor executor;
+    protected final Executor executor;
 
     public AsyncModelService(Executor executor) {
         this.executor = executor;
@@ -18,18 +18,6 @@ public abstract class AsyncModelService<T extends Model>
 
     public CompletableFuture<T> find(String id) {
         return CompletableFuture.supplyAsync(() -> findSync(id), executor);
-    }
-
-    public CompletableFuture<T> get(String id) {
-        return CompletableFuture.supplyAsync(() -> getSync(id), executor);
-    }
-
-    public CompletableFuture<T> getOrFind(String id) {
-        return CompletableFuture.supplyAsync(() -> getOrFindSync(id), executor);
-    }
-
-    public CompletableFuture<List<T>> getAll() {
-        return CompletableFuture.supplyAsync(this::getAllSync, executor);
     }
 
     public CompletableFuture<List<T>> findAll() {
