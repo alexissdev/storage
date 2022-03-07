@@ -5,6 +5,7 @@ import net.cosmogrp.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,23 +26,13 @@ public class LocalModelService<T extends Model>
     }
 
     @Override
-    public @Nullable T getSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public @Nullable T getOrFindSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public List<T> getAllSync() {
-        return new ArrayList<>(cache.values());
+    public List<T> findSync(String field, String value) {
+        return Collections.singletonList(findSync(value));
     }
 
     @Override
     public List<T> findAllSync() {
-        return getAllSync();
+        return new ArrayList<>(cache.values());
     }
 
     @Override
