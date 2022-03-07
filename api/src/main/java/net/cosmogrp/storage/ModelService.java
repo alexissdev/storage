@@ -4,7 +4,6 @@ import net.cosmogrp.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public interface ModelService<T extends Model> {
 
@@ -42,22 +41,6 @@ public interface ModelService<T extends Model> {
      * @param model The model that will be saved.
      */
     void saveSync(T model);
-
-    /**
-     * Uploads the model to the server
-     *
-     * @param model The model to be uploaded.
-     */
-    void uploadSync(T model);
-
-    /**
-     * Upload all the files in the current directory
-     * to the remote server
-     *
-     * @param preUploadAction a function that takes a single
-     *                        parameter, which is the file to be uploaded.
-     */
-    void uploadAllSync(Consumer<T> preUploadAction);
 
     /**
      * DeleteSync deletes the model from the database

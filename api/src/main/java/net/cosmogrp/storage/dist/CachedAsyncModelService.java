@@ -6,6 +6,7 @@ import net.cosmogrp.storage.model.Model;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public abstract class CachedAsyncModelService<T extends Model>
         extends AsyncModelService<T>
@@ -32,5 +33,13 @@ public abstract class CachedAsyncModelService<T extends Model>
 
     public CompletableFuture<List<T>> getAll() {
         return CompletableFuture.supplyAsync(this::getAllSync, executor);
+    }
+
+    public CompletableFuture<Void> upload(T model) {
+        return CompletableFuture.runAsync(() -> uploadSync(model), executor);
+    }
+
+    public CompletableFuture<Void> uploadAll(Consumer<T> preUploadAction) {
+        return CompletableFuture.runAsync(() -> uploadAllSync(preUploadAction), executor);
     }
 }
