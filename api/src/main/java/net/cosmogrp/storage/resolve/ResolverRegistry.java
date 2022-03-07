@@ -1,6 +1,7 @@
 package net.cosmogrp.storage.resolve;
 
 import net.cosmogrp.storage.model.Model;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -26,8 +27,12 @@ public class ResolverRegistry<T extends Model> {
         }
     }
 
+    public @Nullable RelationalResolver<T> getResolver(String field) {
+        return resolvers.get(field);
+    }
+
     public Iterable<String> resolve(String field, String value) {
-        RelationalResolver<T> resolver = resolvers.get(field);
+        RelationalResolver<T> resolver = getResolver(field);
         if (resolver == null) {
             return null;
         }
