@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.model.Model;
+import net.cosmogrp.storage.model.meta.ModelMeta;
 import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 
@@ -35,6 +36,7 @@ public class MongoModelServiceProvider {
     ) {
         return new MongoModelService<>(
                 executor,
+                new ModelMeta<>(modelClass),
                 cacheModelService,
                 JacksonMongoCollection.builder()
                         .withObjectMapper(mapper)
