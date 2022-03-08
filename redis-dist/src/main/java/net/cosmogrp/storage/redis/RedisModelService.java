@@ -27,27 +27,27 @@ public class RedisModelService<T extends Model>
     }
 
     @Override
-    protected void internalSave(T model) {
-        delegate.internalSave(model);
-    }
-
-    @Override
-    protected void internalDelete(T model) {
-        delegate.internalDelete(model);
-    }
-
-    @Override
-    protected @Nullable T internalFind(String id) {
-        return delegate.internalFind(id);
-    }
-
-    @Override
-    protected List<T> internalFindAll() {
-        return delegate.internalFindAll();
-    }
-
-    @Override
     public List<T> findSync(String field, String value) {
         return delegate.findSync(field, value);
+    }
+
+    @Override
+    public List<T> findAllSync() {
+        return delegate.findAllSync();
+    }
+
+    @Override
+    public @Nullable T findSync(String id) {
+        return delegate.findSync(id);
+    }
+
+    @Override
+    public void saveSync(T model) {
+        delegate.saveSync(model);
+    }
+
+    @Override
+    public void deleteSync(T model) {
+        delegate.deleteSync(model);
     }
 }

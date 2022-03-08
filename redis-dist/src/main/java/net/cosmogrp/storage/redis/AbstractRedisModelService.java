@@ -43,7 +43,7 @@ public class AbstractRedisModelService<T extends Model>
     }
 
     @Override
-    protected void internalSave(T model) {
+    public void saveSync(T model) {
         redisCache.set(
                 tableName, model.getId(),
                 gson.toJson(model),
@@ -52,12 +52,12 @@ public class AbstractRedisModelService<T extends Model>
     }
 
     @Override
-    protected void internalDelete(T model) {
+    public void deleteSync(T model) {
         redisCache.del(tableName, model.getId());
     }
 
     @Override
-    protected @Nullable T internalFind(String id) {
+    public @Nullable T findSync(String id) {
         String json = redisCache.get(tableName, id);
 
         if (json == null) {
@@ -68,7 +68,18 @@ public class AbstractRedisModelService<T extends Model>
     }
 
     @Override
-    protected List<T> internalFindAll() {
+    public List<T> findSync(String field, String value) {
+        if (!field.equals(ID_FIELD)) {
+            throw new IllegalArgumentException(
+                    "Only ID field is supported for sync find"
+            );
+        }
+
+        return Collections.singletonList(findSync(value));
+    }
+
+    @Override
+    public List<T> findAllSync() {
         List<String> values = redisCache.getAllValues(tableName);
         List<T> models = new ArrayList<>();
 
@@ -77,16 +88,5 @@ public class AbstractRedisModelService<T extends Model>
         }
 
         return models;
-    }
-
-    @Override
-    public List<T> findSync(String field, String value) {
-        if (!field.equals(ID_FIELD)) {
-            throw new IllegalArgumentException(
-                    "Only ID field is supported for sync find"
-            );
-        }
-
-        return Collections.singletonList(internalFind(value));
     }
 }
