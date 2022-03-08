@@ -100,16 +100,13 @@ public abstract class CachedRemoteModelService<T extends Model>
 
     @Override
     public void saveSync(T model) {
-        cacheModelService.saveSync(model);
-        resolverRegistry.bind(model);
-
+        saveInCache(model);
         internalSave(model);
     }
 
     @Override
     public void uploadSync(T model) {
-        cacheModelService.deleteSync(model);
-        resolverRegistry.unbind(model);
+        deleteInCache(model);
         internalSave(model);
     }
 
@@ -124,8 +121,7 @@ public abstract class CachedRemoteModelService<T extends Model>
 
     @Override
     public void deleteSync(T model) {
-        cacheModelService.deleteSync(model);
-        resolverRegistry.unbind(model);
+        deleteInCache(model);
         internalDelete(model);
     }
 
@@ -141,11 +137,13 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     public void saveInCache(T model) {
+        resolverRegistry.bind(model);
         cacheModelService.saveSync(model);
     }
 
     public void deleteInCache(T model) {
         cacheModelService.deleteSync(model);
+        resolverRegistry.unbind(model);
     }
 
     protected abstract void internalSave(T model);
