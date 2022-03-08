@@ -39,4 +39,7 @@ public class ResolverRegistry<T extends Model> {
         return resolver.resolve(value);
     }
 
+    public static <T extends Model> ResolverRegistryBuilder<T> builder() {
+        return new ResolverRegistryBuilder<>();
+    }
 }
