@@ -2,7 +2,6 @@ package net.cosmogrp.storage.dist;
 
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,15 +16,14 @@ public abstract class CachedRemoteModelService<T extends Model>
     protected final ModelService<T> cacheModelService;
     protected final ResolverRegistry<T> resolverRegistry;
 
-    @SuppressWarnings("unchecked") public CachedRemoteModelService(
+    public CachedRemoteModelService(
             Executor executor,
             ModelService<T> cacheModelService,
-            ModelMeta<T> modelMeta
+            ResolverRegistry<T> resolverRegistry
     ) {
         super(executor);
         this.cacheModelService = cacheModelService;
-        this.resolverRegistry = (ResolverRegistry<T>)
-                modelMeta.getProperty("resolvers");
+        this.resolverRegistry = resolverRegistry;
     }
 
     @Override

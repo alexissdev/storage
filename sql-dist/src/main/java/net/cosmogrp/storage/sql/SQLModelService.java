@@ -3,7 +3,7 @@ package net.cosmogrp.storage.sql;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import net.cosmogrp.storage.sql.connection.SQLClient;
 import net.cosmogrp.storage.sql.identity.SQLMapSerializer;
 import net.cosmogrp.storage.sql.identity.Table;
@@ -27,21 +27,18 @@ public class SQLModelService<T extends Model>
 
     public SQLModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
             ModelService<T> cacheModelService,
+            ResolverRegistry<T> resolverRegistry,
             SQLClient sqlClient,
             RowMapper<T> rowMapper,
-            SQLMapSerializer<T> mapSerializer
+            SQLMapSerializer<T> mapSerializer,
+            Table table
     ) {
-        super(executor, cacheModelService, modelMeta);
+        super(executor, cacheModelService, resolverRegistry);
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
         this.mapSerializer = mapSerializer;
-        this.table = (Table) modelMeta.getProperty("sql-table");
-
-        if (table == null) {
-            throw new IllegalArgumentException("Table not found");
-        }
+        this.table = table;
 
         try (Handle handle = connection.open()) {
             handle.execute(

@@ -1,13 +1,12 @@
 package net.cosmogrp.storage.mongo;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,20 +22,14 @@ public class MongoModelService<T extends DocumentCodec & Model>
 
     public MongoModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
             ModelService<T> cacheModelService,
-            MongoDatabase database,
+            ResolverRegistry<T> resolverRegistry,
+            MongoCollection<Document> mongoCollection,
             MongoModelParser<T> mongoModelParser
     ) {
-        super(executor, cacheModelService, modelMeta);
+        super(executor, cacheModelService, resolverRegistry);
 
-        String collectionName = (String) modelMeta.getProperty("collection");
-
-        if (collectionName == null) {
-            throw new IllegalArgumentException("Collection name is not defined");
-        }
-
-        this.mongoCollection = database.getCollection(collectionName);
+        this.mongoCollection = mongoCollection;
         this.mongoModelParser = mongoModelParser;
     }
 

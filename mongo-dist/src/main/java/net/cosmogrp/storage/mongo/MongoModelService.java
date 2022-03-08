@@ -5,7 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
 import org.mongojack.JacksonMongoCollection;
 
@@ -20,11 +20,11 @@ public class MongoModelService<T extends Model>
 
     public MongoModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
             ModelService<T> cacheModelService,
+            ResolverRegistry<T> resolverRegistry,
             JacksonMongoCollection<T> collection
     ) {
-        super(executor, cacheModelService, modelMeta);
+        super(executor, cacheModelService, resolverRegistry);
         this.collection = collection;
     }
 

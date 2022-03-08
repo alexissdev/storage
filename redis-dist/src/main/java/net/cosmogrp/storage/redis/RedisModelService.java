@@ -3,7 +3,6 @@ package net.cosmogrp.storage.redis;
 import com.google.gson.Gson;
 import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.redis.connection.RedisCache;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,13 +15,14 @@ public class RedisModelService<T extends Model>
 
     public RedisModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
-            Gson gson,
-            RedisCache redisCache
+            Class<T> type,
+            Gson gson, RedisCache redisCache,
+            String tableName, int expireAfterSave
     ) {
         super(executor);
         delegate = new AbstractRedisModelService<>(
-                executor, modelMeta, gson, redisCache
+                executor, type, gson, redisCache,
+                tableName, expireAfterSave
         );
     }
 

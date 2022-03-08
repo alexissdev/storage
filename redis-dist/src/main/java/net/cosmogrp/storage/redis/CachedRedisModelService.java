@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.redis.connection.RedisCache;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,35 +17,37 @@ public class CachedRedisModelService<T extends Model>
 
     public CachedRedisModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
-            Gson gson,
+            Class<T> type,
+            ResolverRegistry<T> resolverRegistry,
             ModelService<T> cacheModelService,
-            RedisCache redisCache
+            Gson gson, RedisCache redisCache,
+            String tableName, int expireAfterSave
     ) {
-        super(executor, cacheModelService, modelMeta);
+        super(executor, cacheModelService, resolverRegistry);
         delegate = new AbstractRedisModelService<>(
-                executor, modelMeta, gson, redisCache
+                executor, type, gson, redisCache,
+                tableName, expireAfterSave
         );
     }
 
     @Override
     protected void internalSave(T model) {
-        delegate.internalSave(model);
+        delegate.saveSync(model);
     }
 
     @Override
     protected void internalDelete(T model) {
-        delegate.internalDelete(model);
+        delegate.deleteSync(model);
     }
 
     @Override
     protected @Nullable T internalFind(String id) {
-        return delegate.internalFind(id);
+        return delegate.findSync(id);
     }
 
     @Override
     protected List<T> internalFindAll() {
-        return delegate.internalFindAll();
+        return delegate.findAllSync();
     }
 
     @Override
