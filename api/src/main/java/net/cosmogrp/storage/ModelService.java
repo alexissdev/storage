@@ -15,15 +15,7 @@ public interface ModelService<T extends Model> {
      * @param id The id of the object to find.
      * @return The method returns a nullable object of type T.
      */
-    default @Nullable T findSync(String id) {
-        List<T> list = findSync(ID_FIELD, id);
-
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        return list.get(0);
-    }
+    @Nullable T findSync(String id);
 
     List<T> findSync(String field, String value);
 

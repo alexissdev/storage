@@ -9,27 +9,11 @@ import java.util.function.Consumer;
 public interface CachedModelService<T extends Model>
         extends ModelService<T> {
 
-    default @Nullable T getSync(String id) {
-        List<T> list = getSync(ID_FIELD, id);
-
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        return list.get(0);
-    }
+    @Nullable T getSync(String id);
 
     List<T> getSync(String field, String value);
 
-    default @Nullable T getOrFindSync(String id) {
-        List<T> list = getOrFindSync(ID_FIELD, id);
-
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        return list.get(0);
-    }
+    @Nullable T getOrFindSync(String id);
 
     List<T> getOrFindSync(String field, String value);
 
