@@ -5,7 +5,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.dist.LocalModelService;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.mongo.model.DummyModel;
 import net.cosmogrp.storage.resolve.RelationalResolver;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
@@ -34,11 +33,9 @@ public final class TestHelper {
 
         return new MongoModelService<>(
                 Executors.newSingleThreadExecutor(),
-                new ModelMeta<>(DummyModel.class)
-                        .addProperty("resolvers", resolverRegistry)
-                        .addProperty("collection", "test"),
                 new LocalModelService<>(),
-                database,
+                resolverRegistry,
+                database.getCollection("test"),
                 DummyModel::fromDocument
         );
     }
