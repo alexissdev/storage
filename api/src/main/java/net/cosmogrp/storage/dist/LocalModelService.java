@@ -15,7 +15,7 @@ public class LocalModelService<T extends Model>
 
     private final Map<String, T> cache;
 
-    public LocalModelService() {
+    private LocalModelService() {
         this.cache = new HashMap<>();
     }
 
@@ -47,5 +47,9 @@ public class LocalModelService<T extends Model>
     @Override
     public T deleteSync(String id) {
         return cache.remove(id);
+    }
+
+    public static <T extends Model> LocalModelService<T> create() {
+        return new LocalModelService<>();
     }
 }
