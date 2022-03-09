@@ -6,12 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.dist.LocalModelService;
 import net.cosmogrp.storage.mongo.model.DummyModel;
-import net.cosmogrp.storage.resolve.RelationalResolver;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
 
 public final class TestHelper {
 
@@ -23,21 +18,16 @@ public final class TestHelper {
         MongoClient client = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = client.getDatabase("admin");
 
-        Map<String, RelationalResolver<DummyModel>> resolvers =
-                new HashMap<>();
-
-        resolvers.put("someValue", new RelationalResolver<>(DummyModel::getSomeValue));
-
-        ResolverRegistry<DummyModel> resolverRegistry =
-                new ResolverRegistry<>(resolvers);
-
-        return new MongoModelService<>(
-                Executors.newSingleThreadExecutor(),
-                new LocalModelService<>(),
-                resolverRegistry,
-                database.getCollection("test"),
-                DummyModel::fromDocument
-        );
+        return (CachedRemoteModelService<DummyModel>)
+                MongoModelService.<DummyModel>builder()
+                        .modelParser(DummyModel::fromDocument)
+                        .cachedService(LocalModelService.create())
+                        .resolverRegistry(ResolverRegistry.<DummyModel>builder()
+                                .register("someValue", DummyModel::getSomeValue)
+                                .build())
+                        .collection("test")
+                        .database(database)
+                        .build();
     }
 
 }
