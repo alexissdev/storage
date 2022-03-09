@@ -42,6 +42,10 @@ public class SQLModelService<T extends Model & MapSerializer>
         }
     }
 
+    public static <T extends Model & MapSerializer> SQLModelServiceBuilder<T> builder() {
+        return new SQLModelServiceBuilder<>();
+    }
+
     @Override
     public @Nullable T findSync(String id) {
         List<T> models = findSync(table.getPrimaryColumn(), id);
