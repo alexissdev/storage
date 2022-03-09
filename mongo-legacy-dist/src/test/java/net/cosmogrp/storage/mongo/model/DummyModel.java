@@ -1,9 +1,9 @@
 package net.cosmogrp.storage.mongo.model;
 
 import net.cosmogrp.storage.model.AbstractModel;
-import net.cosmogrp.storage.mongo.DocumentBuilder;
-import net.cosmogrp.storage.mongo.DocumentCodec;
-import net.cosmogrp.storage.mongo.DocumentReader;
+import net.cosmogrp.storage.mongo.codec.DocumentBuilder;
+import net.cosmogrp.storage.mongo.codec.DocumentCodec;
+import net.cosmogrp.storage.mongo.codec.DocumentReader;
 import org.bson.Document;
 
 public class DummyModel extends AbstractModel
