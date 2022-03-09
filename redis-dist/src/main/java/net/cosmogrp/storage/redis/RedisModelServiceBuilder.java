@@ -6,6 +6,8 @@ import net.cosmogrp.storage.builder.LayoutModelServiceBuilder;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.redis.connection.RedisCache;
 
+import static net.cosmogrp.commons.Validate.notNull;
+
 public class RedisModelServiceBuilder<T extends Model>
         extends LayoutModelServiceBuilder<T, RedisModelServiceBuilder<T>> {
 
@@ -47,6 +49,13 @@ public class RedisModelServiceBuilder<T extends Model>
     @Override
     public ModelService<T> build() {
         check();
+        notNull(gson, "gson");
+        notNull(tableName, "tableName");
+        notNull(redisCache, "redisCache");
+
+        if (expireAfterSave <= 0) {
+            expireAfterSave = -1;
+        }
 
         if (cacheModelService == null) {
             return new RedisModelService<>(

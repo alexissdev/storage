@@ -9,6 +9,8 @@ import net.cosmogrp.storage.mongo.codec.DocumentCodec;
 import net.cosmogrp.storage.mongo.codec.MongoModelParser;
 import org.bson.Document;
 
+import static net.cosmogrp.commons.Validate.notNull;
+
 public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
         extends LayoutModelServiceBuilder<T, MongoModelServiceBuilder<T>> {
 
@@ -38,6 +40,9 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
     @Override
     public ModelService<T> build() {
         check();
+        notNull(modelParser, "modelParser");
+        notNull(database, "database");
+        notNull(collectionName, "collectionName");
 
         MongoCollection<Document> collection =
                 database.getCollection(collectionName);
