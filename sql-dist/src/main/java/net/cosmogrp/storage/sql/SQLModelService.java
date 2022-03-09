@@ -1,11 +1,9 @@
 package net.cosmogrp.storage.sql;
 
-import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.CachedRemoteModelService;
+import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.model.meta.ModelMeta;
 import net.cosmogrp.storage.sql.connection.SQLClient;
-import net.cosmogrp.storage.sql.identity.SQLMapSerializer;
+import net.cosmogrp.storage.sql.identity.MapSerializer;
 import net.cosmogrp.storage.sql.identity.Table;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
@@ -15,32 +13,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
-public class SQLModelService<T extends Model>
-        extends CachedRemoteModelService<T> {
+public class SQLModelService<T extends Model & MapSerializer>
+        extends RemoteModelService<T> {
 
     private final Jdbi connection;
     private final RowMapper<T> rowMapper;
-    private final SQLMapSerializer<T> mapSerializer;
     private final Table table;
 
-    public SQLModelService(
+    protected SQLModelService(
             Executor executor,
-            ModelMeta<T> modelMeta,
-            ModelService<T> cacheModelService,
             SQLClient sqlClient,
             RowMapper<T> rowMapper,
-            SQLMapSerializer<T> mapSerializer
+            Table table
     ) {
-        super(executor, cacheModelService);
+        super(executor);
         this.connection = sqlClient.getConnection();
         this.rowMapper = rowMapper;
-        this.mapSerializer = mapSerializer;
-        this.table = (Table) modelMeta.getProperty("sql-table");
-
-        if (table == null) {
-            throw new IllegalArgumentException("Table not found");
-        }
+        this.table = table;
 
         try (Handle handle = connection.open()) {
             handle.execute(
@@ -51,64 +42,69 @@ public class SQLModelService<T extends Model>
         }
     }
 
+    public static <T extends Model & MapSerializer> SQLModelServiceBuilder<T> builder() {
+        return new SQLModelServiceBuilder<>();
+    }
+
     @Override
-    protected void internalSave(T model) {
-        try (Handle handle = connection.open()) {
-            handle.createUpdate("REPLACE INTO <TABLE> (<COLUMNS>) VALUES (<VALUES>)")
-                    .define("TABLE", table.getName())
-                    .define("COLUMNS", table.getColumns())
-                    .define("VALUES", table.getParameters())
-                    .bindMap(mapSerializer.serialize(model))
-                    .execute();
+    public @Nullable T findSync(String id) {
+        List<T> models = findSync(table.getPrimaryColumn(), id);
+
+        if (models.isEmpty()) {
+            return null;
         }
+
+        return models.get(0);
     }
 
     @Override
-    protected void internalDelete(T model) {
-        try (Handle handle = connection.open()) {
-            handle.createUpdate("DELETE FROM <TABLE> WHERE <COLUMN> = :n")
-                    .define("TABLE", table.getName())
-                    .define("COLUMN", table.getPrimaryColumn())
-                    .bind("n", model.getId())
-                    .execute();
-        }
-    }
-
-    @Override
-    protected @Nullable T internalFind(String id) {
-        return find(table.getPrimaryColumn(), id);
-    }
-
-    public @Nullable T find(String column, String key) {
+    public List<T> findSync(String field, String value) {
         try (Handle handle = connection.open()) {
             return handle.select("SELECT * FROM <TABLE> WHERE <COLUMN> = :n")
                     .define("TABLE", table.getName())
-                    .define("COLUMN", column)
-                    .bind("n", key)
+                    .define("COLUMN", field)
+                    .bind("n", value)
                     .map(rowMapper)
-                    .findFirst()
-                    .orElse(null);
+                    .collect(Collectors.toList());
         }
     }
 
     @Override
-    protected List<T> internalFindAll() {
-        return findAll(table.getPrimaryColumn());
-    }
-
-    public List<T> findAll(String column) {
+    public List<T> findAllSync() {
         try (Handle handle = connection.open()) {
             List<T> models = new ArrayList<>();
 
             for (T model : handle.select("SELECT * FROM <TABLE>")
                     .define("TABLE", table.getName())
-                    .define("COLUMN", column)
                     .map(rowMapper)
             ) {
                 models.add(model);
             }
 
             return models;
+        }
+    }
+
+    @Override
+    public void saveSync(T model) {
+        try (Handle handle = connection.open()) {
+            handle.createUpdate("REPLACE INTO <TABLE> (<COLUMNS>) VALUES (<VALUES>)")
+                    .define("TABLE", table.getName())
+                    .define("COLUMNS", table.getColumns())
+                    .define("VALUES", table.getParameters())
+                    .bindMap(model.toMap())
+                    .execute();
+        }
+    }
+
+    @Override
+    public void deleteSync(T model) {
+        try (Handle handle = connection.open()) {
+            handle.createUpdate("DELETE FROM <TABLE> WHERE <COLUMN> = :n")
+                    .define("TABLE", table.getName())
+                    .define("COLUMN", table.getPrimaryColumn())
+                    .bind("n", model.getId())
+                    .execute();
         }
     }
 }

@@ -1,4 +1,4 @@
-package net.cosmogrp.storage.mongo;
+package net.cosmogrp.storage.mongo.codec;
 
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;

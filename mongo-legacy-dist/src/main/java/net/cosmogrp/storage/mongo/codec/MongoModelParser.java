@@ -1,4 +1,4 @@
-package net.cosmogrp.storage.mongo;
+package net.cosmogrp.storage.mongo.codec;
 
 import net.cosmogrp.storage.model.Model;
 

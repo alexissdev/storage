@@ -1,3 +1,7 @@
+plugins {
+    id("storage.publishing-conventions")
+}
+
 dependencies {
-    compileOnly("com.google.code.gson:gson:2.9.0")
+    compileOnly(libs.gson)
 }

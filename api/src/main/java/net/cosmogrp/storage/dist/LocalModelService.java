@@ -5,17 +5,17 @@ import net.cosmogrp.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class LocalModelService<T extends Model>
         implements ModelService<T> {
 
     private final Map<String, T> cache;
 
-    public LocalModelService() {
+    private LocalModelService() {
         this.cache = new HashMap<>();
     }
 
@@ -25,38 +25,18 @@ public class LocalModelService<T extends Model>
     }
 
     @Override
-    public @Nullable T getSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public @Nullable T getOrFindSync(String id) {
-        return findSync(id);
-    }
-
-    @Override
-    public List<T> getAllSync() {
-        return new ArrayList<>(cache.values());
+    public List<T> findSync(String field, String value) {
+        return Collections.singletonList(findSync(value));
     }
 
     @Override
     public List<T> findAllSync() {
-        return getAllSync();
+        return new ArrayList<>(cache.values());
     }
 
     @Override
     public void saveSync(T model) {
         cache.put(model.getId(), model);
-    }
-
-    @Override
-    public void uploadSync(T model) {
-        cache.put(model.getId(), model);
-    }
-
-    @Override
-    public void uploadAllSync(Consumer<T> preUploadAction) {
-        // nothing is supposed to be done here
     }
 
     @Override
@@ -67,5 +47,9 @@ public class LocalModelService<T extends Model>
     @Override
     public T deleteSync(String id) {
         return cache.remove(id);
+    }
+
+    public static <T extends Model> LocalModelService<T> create() {
+        return new LocalModelService<>();
     }
 }

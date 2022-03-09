@@ -1,3 +1,8 @@
+plugins {
+    id("storage.publishing-conventions")
+}
+
 dependencies {
-    api("org.jetbrains:annotations:22.0.0")
+    api(libs.annotations)
+    api(libs.commons.validate)
 }

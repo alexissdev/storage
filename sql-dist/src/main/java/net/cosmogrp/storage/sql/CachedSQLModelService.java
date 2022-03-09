@@ -1,32 +1,35 @@
-package net.cosmogrp.storage.redis;
+package net.cosmogrp.storage.sql;
 
-import com.google.gson.Gson;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.redis.connection.RedisCache;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
+import net.cosmogrp.storage.sql.connection.SQLClient;
+import net.cosmogrp.storage.sql.identity.MapSerializer;
+import net.cosmogrp.storage.sql.identity.Table;
+import org.jdbi.v3.core.mapper.RowMapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class CachedRedisModelService<T extends Model>
+public class CachedSQLModelService<T extends Model & MapSerializer>
         extends CachedRemoteModelService<T> {
-    private final RedisModelService<T> delegate;
 
-    protected CachedRedisModelService(
+    private final SQLModelService<T> delegate;
+
+    protected CachedSQLModelService(
             Executor executor,
-            Class<T> type,
-            ResolverRegistry<T> resolverRegistry,
             ModelService<T> cacheModelService,
-            Gson gson, RedisCache redisCache,
-            String tableName, int expireAfterSave
+            ResolverRegistry<T> resolverRegistry,
+            SQLClient client,
+            RowMapper<T> mapper,
+            Table table
     ) {
         super(executor, cacheModelService, resolverRegistry);
-        delegate = new RedisModelService<>(
-                executor, type, gson, redisCache,
-                tableName, expireAfterSave
+        this.delegate = new SQLModelService<>(
+                executor, client,
+                mapper, table
         );
     }
 

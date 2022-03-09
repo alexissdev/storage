@@ -5,6 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
+import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
 import org.mongojack.JacksonMongoCollection;
 
@@ -20,9 +21,10 @@ public class MongoModelService<T extends Model>
     public MongoModelService(
             Executor executor,
             ModelService<T> cacheModelService,
+            ResolverRegistry<T> resolverRegistry,
             JacksonMongoCollection<T> collection
     ) {
-        super(executor, cacheModelService);
+        super(executor, cacheModelService, resolverRegistry);
         this.collection = collection;
     }
 
@@ -50,4 +52,9 @@ public class MongoModelService<T extends Model>
                 .into(new ArrayList<>());
     }
 
+    @Override
+    public List<T> findSync(String field, String value) {
+        return collection.find(Filters.eq(field, value))
+                .into(new ArrayList<>());
+    }
 }
