@@ -13,7 +13,7 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
         extends LayoutModelServiceBuilder<T, MongoModelServiceBuilder<T>> {
 
     private MongoDatabase database;
-    private MongoCollection<Document> collection;
+    private String collectionName;
     private MongoModelParser<T> modelParser;
 
     protected MongoModelServiceBuilder() {
@@ -31,13 +31,16 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
     }
 
     public MongoModelServiceBuilder<T> collection(String collection) {
-        this.collection = database.getCollection(collection);
+        this.collectionName = collection;
         return this;
     }
 
     @Override
     public ModelService<T> build() {
         check();
+
+        MongoCollection<Document> collection =
+                database.getCollection(collectionName);
 
         if (cacheModelService == null) {
             return new MongoModelService<>(executor, collection, modelParser);
