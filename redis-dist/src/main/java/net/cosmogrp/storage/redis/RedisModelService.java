@@ -19,7 +19,7 @@ public class RedisModelService<T extends Model>
     private final String tableName;
     private final int expireAfterSave;
 
-    public RedisModelService(
+    protected RedisModelService(
             Executor executor,
             Class<T> type,
             Gson gson, RedisCache redisCache,

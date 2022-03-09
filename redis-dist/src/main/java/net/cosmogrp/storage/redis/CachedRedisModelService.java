@@ -15,7 +15,7 @@ public class CachedRedisModelService<T extends Model>
         extends CachedRemoteModelService<T> {
     private final RedisModelService<T> delegate;
 
-    public CachedRedisModelService(
+    protected CachedRedisModelService(
             Executor executor,
             Class<T> type,
             ResolverRegistry<T> resolverRegistry,
