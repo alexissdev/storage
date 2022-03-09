@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     api(libs.annotations)
+    api(libs.commons.validate)
 }
