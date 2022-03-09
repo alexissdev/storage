@@ -18,7 +18,7 @@ public class CachedSQLModelService<T extends Model & MapSerializer>
 
     private final SQLModelService<T> delegate;
 
-    public CachedSQLModelService(
+    protected CachedSQLModelService(
             Executor executor,
             ModelService<T> cacheModelService,
             ResolverRegistry<T> resolverRegistry,

@@ -22,7 +22,7 @@ public class SQLModelService<T extends Model & MapSerializer>
     private final RowMapper<T> rowMapper;
     private final Table table;
 
-    public SQLModelService(
+    protected SQLModelService(
             Executor executor,
             SQLClient sqlClient,
             RowMapper<T> rowMapper,
