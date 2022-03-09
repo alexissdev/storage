@@ -33,6 +33,12 @@ public class RedisModelService<T extends Model>
         this.expireAfterSave = expireAfterSave;
     }
 
+    public static <T extends Model> RedisModelServiceBuilder<T> builder(
+            Class<T> type
+    ) {
+        return new RedisModelServiceBuilder<>(type);
+    }
+
     @Override
     public void saveSync(T model) {
         redisCache.set(
