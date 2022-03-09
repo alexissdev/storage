@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 
 public class CachedRedisModelService<T extends Model>
         extends CachedRemoteModelService<T> {
-    private final AbstractRedisModelService<T> delegate;
+    private final RedisModelService<T> delegate;
 
     public CachedRedisModelService(
             Executor executor,
@@ -24,7 +24,7 @@ public class CachedRedisModelService<T extends Model>
             String tableName, int expireAfterSave
     ) {
         super(executor, cacheModelService, resolverRegistry);
-        delegate = new AbstractRedisModelService<>(
+        delegate = new RedisModelService<>(
                 executor, type, gson, redisCache,
                 tableName, expireAfterSave
         );
