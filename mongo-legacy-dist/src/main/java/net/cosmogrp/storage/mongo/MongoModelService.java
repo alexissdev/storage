@@ -77,7 +77,7 @@ public class MongoModelService<T extends Model & DocumentCodec>
     public void saveSync(T model) {
         mongoCollection.replaceOne(
                 Filters.eq("_id", model.getId()),
-                model.toDocument(),
+                model.serialize(),
                 new ReplaceOptions().upsert(true)
         );
     }
