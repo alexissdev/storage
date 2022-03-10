@@ -2,6 +2,7 @@ package net.cosmogrp.storage.mongo.codec;
 
 import net.cosmogrp.storage.codec.ModelCodec;
 import net.cosmogrp.storage.codec.ModelWriter;
+import net.cosmogrp.storage.codec.PrimitiveModelWriter;
 import net.cosmogrp.storage.model.Model;
 import org.bson.Document;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 /**
  * It's a builder for documents
  */
-public class DocumentWriter implements ModelWriter<Document> {
+public class DocumentWriter extends PrimitiveModelWriter<Document> {
 
     private final Document document;
 
@@ -26,47 +27,9 @@ public class DocumentWriter implements ModelWriter<Document> {
         return new DocumentWriter();
     }
 
-    public static DocumentWriter create(Model model) {
+    public static ModelWriter<Document> create(Model model) {
         return new DocumentWriter()
                 .write("_id", model.getId());
-    }
-
-    /**
-     * Write a field with a UUID value
-     *
-     * @param field The field name to write to.
-     * @param uuid  The UUID to write to the document.
-     * @return Nothing.
-     */
-    @Override
-    public DocumentWriter write(String field, UUID uuid) {
-        document.append(field, uuid.toString());
-        return this;
-    }
-
-    @Override
-    public DocumentWriter write(String field, String value) {
-        return write0(field, value);
-    }
-
-    @Override
-    public DocumentWriter write(String field, int value) {
-        return write0(field, value);
-    }
-
-    @Override
-    public DocumentWriter write(String field, long value) {
-        return write0(field, value);
-    }
-
-    @Override
-    public DocumentWriter write(String field, double value) {
-        return write0(field, value);
-    }
-
-    @Override
-    public DocumentWriter write(String field, boolean value) {
-        return write0(field, value);
     }
 
     @Override
@@ -115,7 +78,8 @@ public class DocumentWriter implements ModelWriter<Document> {
      * @param value The value to be written.
      * @return Nothing.
      */
-    private DocumentWriter write0(String field, Object value) {
+    @Override
+    protected DocumentWriter write0(String field, Object value) {
         document.append(field, value);
         return this;
     }
