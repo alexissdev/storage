@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * It's a builder for documents
@@ -23,7 +22,7 @@ public class DocumentWriter extends PrimitiveModelWriter<Document> {
         document = new Document();
     }
 
-    public static DocumentWriter create() {
+    public static ModelWriter<Document> create() {
         return new DocumentWriter();
     }
 
