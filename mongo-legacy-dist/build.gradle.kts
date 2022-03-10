@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":api"))
+    api(project(":api-codec"))
     api(libs.mongo.driver)
 
     testImplementation(project(":mongo-legacy-dist"))
