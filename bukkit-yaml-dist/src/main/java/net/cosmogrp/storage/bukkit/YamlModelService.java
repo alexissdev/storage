@@ -30,6 +30,10 @@ public class YamlModelService<T extends Model & YamlCodec>
         this.modelParser = modelParser;
     }
 
+    public static <T extends Model & YamlCodec> YamlModelServiceBuilder<T> builder() {
+        return new YamlModelServiceBuilder<>();
+    }
+
     @Override
     public @Nullable T findSync(String id) {
         File file = createFile(id, false);
