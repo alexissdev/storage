@@ -14,7 +14,9 @@ public interface ModelReader<R> {
      * @param field The name of the field to read.
      * @return Nothing.
      */
-    UUID readUuid(String field);
+    default UUID readUuid(String field) {
+        return UUID.fromString(readString(field));
+    }
 
     /**
      * It reads a list of objects from the
@@ -25,7 +27,9 @@ public interface ModelReader<R> {
      *              elements of the set.
      * @return A Set of the given class.
      */
-    <T> Set<T> readSet(String field, Class<T> clazz);
+    default <T> Set<T> readSet(String field, Class<T> clazz) {
+        return new HashSet<>(readList(field, clazz));
+    }
 
     /**
      * Reads a date from the document
@@ -58,7 +62,9 @@ public interface ModelReader<R> {
      * @param field The field to read.
      * @return The value of the field.
      */
-    float readFloat(String field);
+    default float readFloat(String field) {
+        return (float) readDouble(field);
+    }
 
     /**
      * Reads a long from the document
