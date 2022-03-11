@@ -1,20 +1,14 @@
 package net.cosmogrp.storage.mongo.codec;
 
-import net.cosmogrp.storage.codec.ModelCodec;
 import net.cosmogrp.storage.codec.ModelWriter;
-import net.cosmogrp.storage.codec.PrimitiveModelWriter;
+import net.cosmogrp.storage.codec.AbstractModelWriter;
 import net.cosmogrp.storage.model.Model;
 import org.bson.Document;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * It's a builder for documents
  */
-public class DocumentWriter extends PrimitiveModelWriter<Document> {
+public class DocumentWriter extends AbstractModelWriter<Document> {
 
     private final Document document;
 
@@ -29,31 +23,6 @@ public class DocumentWriter extends PrimitiveModelWriter<Document> {
     public static ModelWriter<Document> create(Model model) {
         return new DocumentWriter()
                 .write("_id", model.getId());
-    }
-
-    @Override
-    public DocumentWriter write(String field, ModelCodec<Document> child) {
-        if (child == null) {
-            document.append(field, null);
-        } else {
-            document.append(field, child.serialize());
-        }
-
-        return this;
-    }
-
-    @Override
-    public DocumentWriter write(
-            String field,
-            Collection<? extends ModelCodec<Document>> children
-    ) {
-        List<Document> documents = new ArrayList<>(children.size());
-        for (ModelCodec<Document> child : children) {
-            documents.add(child.serialize());
-        }
-
-        document.append(field, documents);
-        return this;
     }
 
     /**
