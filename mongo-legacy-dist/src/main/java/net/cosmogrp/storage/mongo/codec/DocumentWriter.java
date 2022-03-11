@@ -56,20 +56,6 @@ public class DocumentWriter extends PrimitiveModelWriter<Document> {
         return this;
     }
 
-    @Override
-    public DocumentWriter write(
-            String field,
-            Map<?, ? extends ModelCodec<Document>> children
-    ) {
-        List<Document> documents = new ArrayList<>(children.size());
-        for (ModelCodec<Document> child : children.values()) {
-            documents.add(child.serialize());
-        }
-
-        document.append(field, documents);
-        return this;
-    }
-
     /**
      * It adds a field to the document.
      *

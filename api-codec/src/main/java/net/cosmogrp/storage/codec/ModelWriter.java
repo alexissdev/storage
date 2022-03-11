@@ -28,10 +28,12 @@ public interface ModelWriter<R> {
             Collection<? extends ModelCodec<R>> children
     );
 
-    ModelWriter<R> write(
+    default ModelWriter<R> write(
             String field,
             Map<?, ? extends ModelCodec<R>> children
-    );
+    ) {
+        return write(field, children.values());
+    }
 
     R end();
     
