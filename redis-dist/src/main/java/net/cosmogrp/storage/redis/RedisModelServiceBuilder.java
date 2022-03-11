@@ -3,6 +3,7 @@ package net.cosmogrp.storage.redis;
 import com.google.gson.Gson;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.builder.LayoutModelServiceBuilder;
+import net.cosmogrp.storage.dist.DelegatedCachedModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.redis.connection.RedisCache;
 
@@ -57,18 +58,18 @@ public class RedisModelServiceBuilder<T extends Model>
             expireAfterSave = -1;
         }
 
+        ModelService<T> modelService = new RedisModelService<>(
+                executor, type, gson,
+                redisCache, tableName,
+                expireAfterSave
+        );
+
         if (cacheModelService == null) {
-            return new RedisModelService<>(
-                    executor, type, gson,
-                    redisCache, tableName,
-                    expireAfterSave
-            );
+            return modelService;
         } else {
-            return new CachedRedisModelService<>(
-                    executor, type, resolverRegistry,
-                    cacheModelService,
-                    gson, redisCache, tableName,
-                    expireAfterSave
+            return new DelegatedCachedModelService<>(
+                    executor, cacheModelService,
+                    resolverRegistry, modelService
             );
         }
     }
