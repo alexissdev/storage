@@ -19,8 +19,12 @@ public class YamlReader implements ModelReader<Map<String, Object>> {
 
     private final ConfigurationSection parentSection;
 
-    public YamlReader(ConfigurationSection parentSection) {
+    private YamlReader(ConfigurationSection parentSection) {
         this.parentSection = parentSection;
+    }
+
+    public static YamlReader create(ConfigurationSection parentSection) {
+        return new YamlReader(parentSection);
     }
 
     @Override
