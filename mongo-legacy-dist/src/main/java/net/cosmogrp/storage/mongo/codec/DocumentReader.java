@@ -26,16 +26,6 @@ public class DocumentReader implements ModelReader<Document> {
     }
 
     @Override
-    public UUID readUuid(String field) {
-        return UUID.fromString(readString(field));
-    }
-
-    @Override
-    public <T> Set<T> readSet(String field, Class<T> clazz) {
-        return new HashSet<>(document.getList(field, clazz));
-    }
-
-    @Override
     public Date readDate(String field) {
         return document.getDate(field);
     }
@@ -48,17 +38,6 @@ public class DocumentReader implements ModelReader<Document> {
     @Override
     public double readDouble(String field) {
         return document.getDouble(field);
-    }
-
-    @Override
-    public float readFloat(String field) {
-        Double value = document.getDouble(field);
-
-        if (value == null) {
-            return 0;
-        }
-
-        return (float) ((double) value);
     }
 
     @Override
@@ -100,7 +79,7 @@ public class DocumentReader implements ModelReader<Document> {
             String field, Function<V, K> keyParser,
             Function<ModelReader<Document>, V> valueParser
     ) {
-        List<Document> documents = document.getList(field, Document.class);
+        List<Document> documents = readList(field, Document.class);
         Map<K, V> map = new HashMap<>(documents.size());
 
         for (Document document : documents) {
@@ -118,7 +97,7 @@ public class DocumentReader implements ModelReader<Document> {
             Function<ModelReader<Document>, T> parser
     ) {
         Set<T> children = new HashSet<>();
-        List<Document> documents = document.getList(field, Document.class);
+        List<Document> documents = readList(field, Document.class);
 
         for (Document document : documents) {
             children.add(parser.apply(
