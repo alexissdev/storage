@@ -37,7 +37,9 @@ public interface ModelReader<R> {
      * @param field The field name to read.
      * @return Nothing.
      */
-    Date readDate(String field);
+    default Date readDate(String field) {
+        return new Date(readLong(field));
+    }
 
     /**
      * Reads a string from the document
