@@ -32,6 +32,11 @@ public class MongoModelService<T extends Model & DocumentCodec>
         this.mongoModelParser = mongoModelParser;
     }
 
+    public static <T extends Model & DocumentCodec>
+    MongoModelServiceBuilder<T> builder(Class<T> type) {
+        return new MongoModelServiceBuilder<>(type);
+    }
+
     @Override
     public @Nullable T findSync(String id) {
         Document document = mongoCollection
@@ -85,9 +90,5 @@ public class MongoModelService<T extends Model & DocumentCodec>
     @Override
     public void deleteSync(T model) {
         mongoCollection.deleteOne(Filters.eq("_id", model.getId()));
-    }
-
-    public static <T extends Model & DocumentCodec> MongoModelServiceBuilder<T> builder() {
-        return new MongoModelServiceBuilder<>();
     }
 }

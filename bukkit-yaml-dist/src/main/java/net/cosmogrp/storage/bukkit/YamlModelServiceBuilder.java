@@ -18,8 +18,8 @@ public class YamlModelServiceBuilder<T extends Model & YamlCodec>
     private YamlModelParser<T> modelParser;
     private File folder;
 
-    protected YamlModelServiceBuilder() {
-
+    protected YamlModelServiceBuilder(Class<T> type) {
+        super(type);
     }
 
     public YamlModelServiceBuilder<T> folder(File folder) {

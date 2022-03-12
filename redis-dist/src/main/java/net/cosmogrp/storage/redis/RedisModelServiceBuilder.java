@@ -12,14 +12,13 @@ import static net.cosmogrp.commons.Validate.notNull;
 public class RedisModelServiceBuilder<T extends Model>
         extends LayoutModelServiceBuilder<T, RedisModelServiceBuilder<T>> {
 
-    private final Class<T> type;
     private Gson gson;
     private String tableName;
     private int expireAfterSave;
     private RedisCache redisCache;
 
     protected RedisModelServiceBuilder(Class<T> type) {
-        this.type = type;
+        super(type);
     }
 
     public RedisModelServiceBuilder<T> gson(Gson gson) {

@@ -42,8 +42,9 @@ public class SQLModelService<T extends Model & MapSerializer>
         }
     }
 
-    public static <T extends Model & MapSerializer> SQLModelServiceBuilder<T> builder() {
-        return new SQLModelServiceBuilder<>();
+    public static <T extends Model & MapSerializer>
+    SQLModelServiceBuilder<T> builder(Class<T> type) {
+        return new SQLModelServiceBuilder<>(type);
     }
 
     @Override

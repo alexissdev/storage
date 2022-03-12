@@ -19,8 +19,8 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
     private String collectionName;
     private MongoModelParser<T> modelParser;
 
-    protected MongoModelServiceBuilder() {
-
+    protected MongoModelServiceBuilder(Class<T> type) {
+        super(type);
     }
 
     public MongoModelServiceBuilder<T> database(MongoDatabase database) {

@@ -30,8 +30,9 @@ public class YamlModelService<T extends Model & YamlCodec>
         this.modelParser = modelParser;
     }
 
-    public static <T extends Model & YamlCodec> YamlModelServiceBuilder<T> builder() {
-        return new YamlModelServiceBuilder<>();
+    public static <T extends Model & YamlCodec>
+    YamlModelServiceBuilder<T> builder(Class<T> type) {
+        return new YamlModelServiceBuilder<>(type);
     }
 
     @Override
