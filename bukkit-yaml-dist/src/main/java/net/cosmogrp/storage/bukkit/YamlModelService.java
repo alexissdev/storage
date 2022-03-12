@@ -21,7 +21,7 @@ public class YamlModelService<T extends Model & YamlCodec>
     private final File folder;
     private final YamlModelParser<T> modelParser;
 
-    public YamlModelService(
+    protected YamlModelService(
             Executor executor, File folder,
             YamlModelParser<T> modelParser
     ) {
