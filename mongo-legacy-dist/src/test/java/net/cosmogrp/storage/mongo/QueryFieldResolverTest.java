@@ -1,6 +1,6 @@
 package net.cosmogrp.storage.mongo;
 
-import net.cosmogrp.storage.dist.CachedRemoteModelService;
+import net.cosmogrp.storage.dist.CachedModelService;
 import net.cosmogrp.storage.mongo.model.DummyModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ public class QueryFieldResolverTest {
 
     @Test
     public void test() {
-        CachedRemoteModelService<DummyModel> modelService =
+        CachedModelService<DummyModel> modelService =
                 TestHelper.create();
 
         for (int i = 0; i < 5; i++) {

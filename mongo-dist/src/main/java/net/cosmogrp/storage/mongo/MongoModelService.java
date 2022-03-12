@@ -3,7 +3,7 @@ package net.cosmogrp.storage.mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.CachedRemoteModelService;
+import net.cosmogrp.storage.dist.CachedModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class MongoModelService<T extends Model>
-        extends CachedRemoteModelService<T> {
+        extends CachedModelService<T> {
 
     private final JacksonMongoCollection<T> collection;
 

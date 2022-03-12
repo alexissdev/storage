@@ -1,6 +1,6 @@
 package net.cosmogrp.storage.sql;
 
-import net.cosmogrp.storage.dist.RemoteModelService;
+import net.cosmogrp.storage.dist.AbstractModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.sql.connection.SQLClient;
 import net.cosmogrp.storage.sql.identity.MapSerializer;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 public class SQLModelService<T extends Model & MapSerializer>
-        extends RemoteModelService<T> {
+        extends AbstractModelService<T> {
 
     private final Jdbi connection;
     private final RowMapper<T> rowMapper;
@@ -42,8 +42,9 @@ public class SQLModelService<T extends Model & MapSerializer>
         }
     }
 
-    public static <T extends Model & MapSerializer> SQLModelServiceBuilder<T> builder() {
-        return new SQLModelServiceBuilder<>();
+    public static <T extends Model & MapSerializer>
+    SQLModelServiceBuilder<T> builder(Class<T> type) {
+        return new SQLModelServiceBuilder<>(type);
     }
 
     @Override

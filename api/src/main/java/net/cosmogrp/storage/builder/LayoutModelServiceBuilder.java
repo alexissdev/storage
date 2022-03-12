@@ -11,9 +11,14 @@ public abstract class LayoutModelServiceBuilder
         <T extends Model, O extends ModelServiceBuilder<T>>
         implements ModelServiceBuilder<T> {
 
+    protected final Class<T> type;
     protected Executor executor;
     protected ModelService<T> cacheModelService;
     protected ResolverRegistry<T> resolverRegistry;
+
+    public LayoutModelServiceBuilder(Class<T> type) {
+        this.type = type;
+    }
 
     @Override
     public O executor(Executor executor) {

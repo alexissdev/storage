@@ -1,10 +1,9 @@
 plugins {
     id("storage.publishing-conventions")
+    id("storage.spigot-conventions")
 }
 
 dependencies {
     api(project(":api-codec"))
-    api(libs.mongo.driver)
-
-    testImplementation(project(":mongo-legacy-dist"))
+    compileOnly(libs.spigot)
 }

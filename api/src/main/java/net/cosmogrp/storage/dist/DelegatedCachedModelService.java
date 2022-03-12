@@ -1,36 +1,26 @@
-package net.cosmogrp.storage.mongo;
+package net.cosmogrp.storage.dist;
 
-import com.mongodb.client.MongoCollection;
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
-import net.cosmogrp.storage.mongo.codec.DocumentCodec;
-import net.cosmogrp.storage.mongo.codec.MongoModelParser;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
-import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class CachedMongoModelService<T extends DocumentCodec & Model>
-        extends CachedRemoteModelService<T> {
+public class DelegatedCachedModelService<T extends Model>
+        extends CachedModelService<T> {
 
-    private final MongoModelService<T> delegate;
+    protected final ModelService<T> delegate;
 
-    public CachedMongoModelService(
+    public DelegatedCachedModelService(
             Executor executor,
             ModelService<T> cacheModelService,
             ResolverRegistry<T> resolverRegistry,
-            MongoCollection<Document> mongoCollection,
-            MongoModelParser<T> mongoModelParser
+            ModelService<T> delegate
     ) {
         super(executor, cacheModelService, resolverRegistry);
-
-        this.delegate = new MongoModelService<>(
-                executor, mongoCollection,
-                mongoModelParser
-        );
+        this.delegate = delegate;
     }
 
     @Override

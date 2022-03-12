@@ -3,7 +3,7 @@ package net.cosmogrp.storage.mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
-import net.cosmogrp.storage.dist.RemoteModelService;
+import net.cosmogrp.storage.dist.AbstractModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.mongo.codec.DocumentCodec;
 import net.cosmogrp.storage.mongo.codec.DocumentReader;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class MongoModelService<T extends Model & DocumentCodec>
-        extends RemoteModelService<T> {
+        extends AbstractModelService<T> {
 
     private final MongoCollection<Document> mongoCollection;
     private final MongoModelParser<T> mongoModelParser;
@@ -30,6 +30,11 @@ public class MongoModelService<T extends Model & DocumentCodec>
 
         this.mongoCollection = mongoCollection;
         this.mongoModelParser = mongoModelParser;
+    }
+
+    public static <T extends Model & DocumentCodec>
+    MongoModelServiceBuilder<T> builder(Class<T> type) {
+        return new MongoModelServiceBuilder<>(type);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class MongoModelService<T extends Model & DocumentCodec>
     public void saveSync(T model) {
         mongoCollection.replaceOne(
                 Filters.eq("_id", model.getId()),
-                model.toDocument(),
+                model.serialize(),
                 new ReplaceOptions().upsert(true)
         );
     }
@@ -85,9 +90,5 @@ public class MongoModelService<T extends Model & DocumentCodec>
     @Override
     public void deleteSync(T model) {
         mongoCollection.deleteOne(Filters.eq("_id", model.getId()));
-    }
-
-    public static <T extends Model & DocumentCodec> MongoModelServiceBuilder<T> builder() {
-        return new MongoModelServiceBuilder<>();
     }
 }

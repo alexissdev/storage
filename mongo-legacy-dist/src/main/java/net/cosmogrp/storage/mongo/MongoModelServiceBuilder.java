@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.cosmogrp.storage.ModelService;
 import net.cosmogrp.storage.builder.LayoutModelServiceBuilder;
+import net.cosmogrp.storage.dist.DelegatedCachedModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.mongo.codec.DocumentCodec;
 import net.cosmogrp.storage.mongo.codec.MongoModelParser;
@@ -18,8 +19,8 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
     private String collectionName;
     private MongoModelParser<T> modelParser;
 
-    protected MongoModelServiceBuilder() {
-
+    protected MongoModelServiceBuilder(Class<T> type) {
+        super(type);
     }
 
     public MongoModelServiceBuilder<T> database(MongoDatabase database) {
@@ -47,13 +48,15 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
         MongoCollection<Document> collection =
                 database.getCollection(collectionName);
 
+        MongoModelService<T> modelService =
+                new MongoModelService<>(executor, collection, modelParser);
+
         if (cacheModelService == null) {
-            return new MongoModelService<>(executor, collection, modelParser);
+            return modelService;
         } else {
-            return new CachedMongoModelService<>(
+            return new DelegatedCachedModelService<>(
                     executor, cacheModelService,
-                    resolverRegistry, collection,
-                    modelParser
+                    resolverRegistry, modelService
             );
         }
     }

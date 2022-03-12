@@ -17,8 +17,8 @@ public class SQLModelServiceBuilder<T extends Model & MapSerializer>
     private RowMapper<T> rowMapper;
     private Table table;
 
-    protected SQLModelServiceBuilder() {
-
+    protected SQLModelServiceBuilder(Class<T> type) {
+        super(type);
     }
 
     public SQLModelServiceBuilder<T> client(SQLClient sqlClient) {
