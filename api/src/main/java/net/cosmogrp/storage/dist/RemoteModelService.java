@@ -3,9 +3,9 @@ package net.cosmogrp.storage.dist;
 import net.cosmogrp.storage.model.Model;
 import java.util.concurrent.Executor;
 
-public abstract class AbstractModelService<T extends Model>
+public abstract class RemoteModelService<T extends Model>
         extends AsyncModelService<T> {
-    public AbstractModelService(Executor executor) {
+    public RemoteModelService(Executor executor) {
         super(executor);
     }
 

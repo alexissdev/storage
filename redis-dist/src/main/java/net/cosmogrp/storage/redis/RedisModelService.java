@@ -1,7 +1,7 @@
 package net.cosmogrp.storage.redis;
 
 import com.google.gson.Gson;
-import net.cosmogrp.storage.dist.AbstractModelService;
+import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.redis.connection.RedisCache;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class RedisModelService<T extends Model>
-        extends AbstractModelService<T> {
+        extends RemoteModelService<T> {
     private final Gson gson;
     private final Class<T> type;
     private final RedisCache redisCache;

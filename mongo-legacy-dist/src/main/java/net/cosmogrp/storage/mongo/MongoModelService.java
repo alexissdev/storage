@@ -3,7 +3,7 @@ package net.cosmogrp.storage.mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
-import net.cosmogrp.storage.dist.AbstractModelService;
+import net.cosmogrp.storage.dist.RemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.mongo.codec.DocumentCodec;
 import net.cosmogrp.storage.mongo.codec.DocumentReader;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class MongoModelService<T extends Model & DocumentCodec>
-        extends AbstractModelService<T> {
+        extends RemoteModelService<T> {
 
     private final MongoCollection<Document> mongoCollection;
     private final MongoModelParser<T> mongoModelParser;

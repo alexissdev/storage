@@ -1,7 +1,7 @@
 package net.cosmogrp.storage.sql;
 
 import net.cosmogrp.storage.ModelService;
-import net.cosmogrp.storage.dist.CachedModelService;
+import net.cosmogrp.storage.dist.CachedRemoteModelService;
 import net.cosmogrp.storage.model.Model;
 import net.cosmogrp.storage.resolve.ResolverRegistry;
 import net.cosmogrp.storage.sql.connection.SQLClient;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class CachedSQLModelService<T extends Model & MapSerializer>
-        extends CachedModelService<T> {
+        extends CachedRemoteModelService<T> {
 
     private final SQLModelService<T> delegate;
 
