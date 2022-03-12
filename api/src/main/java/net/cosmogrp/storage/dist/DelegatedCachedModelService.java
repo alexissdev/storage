@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class DelegatedCachedModelService<T extends Model>
-        extends CachedRemoteModelService<T> {
+        extends CachedModelService<T> {
 
     protected final ModelService<T> delegate;
 

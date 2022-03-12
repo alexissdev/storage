@@ -3,7 +3,7 @@ package net.cosmogrp.storage.bukkit;
 import net.cosmogrp.storage.bukkit.codec.YamlCodec;
 import net.cosmogrp.storage.bukkit.codec.YamlModelParser;
 import net.cosmogrp.storage.bukkit.codec.YamlReader;
-import net.cosmogrp.storage.dist.RemoteModelService;
+import net.cosmogrp.storage.dist.AbstractModelService;
 import net.cosmogrp.storage.model.Model;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class YamlModelService<T extends Model & YamlCodec>
-        extends RemoteModelService<T> {
+        extends AbstractModelService<T> {
 
     private final File folder;
     private final YamlModelParser<T> modelParser;

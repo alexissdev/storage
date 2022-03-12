@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public abstract class CachedRemoteModelService<T extends Model>
+public abstract class CachedModelService<T extends Model>
         extends CachedAsyncModelService<T> {
 
     protected final ModelService<T> cacheModelService;
     protected final ResolverRegistry<T> resolverRegistry;
 
-    public CachedRemoteModelService(
+    public CachedModelService(
             Executor executor,
             ModelService<T> cacheModelService,
             ResolverRegistry<T> resolverRegistry
