@@ -52,6 +52,12 @@ public class YamlModelServiceBuilder<T extends Model & YamlCodec>
         notNull(modelParser, "modelParser");
         notNull(folder, "folder");
 
+        if (!folder.exists()) {
+            state(folder.mkdirs(),
+                    "Failed to create folder: "
+                            + folder.getName());
+        }
+
         YamlModelService<T> modelService =
                 new YamlModelService<>(executor, folder, modelParser);
 
