@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 
 import static net.cosmogrp.commons.Validate.notNull;
+import static net.cosmogrp.commons.Validate.state;
 
 public class YamlModelServiceBuilder<T extends Model & YamlCodec>
         extends LayoutModelServiceBuilder<T, YamlModelServiceBuilder<T>> {
@@ -25,6 +26,10 @@ public class YamlModelServiceBuilder<T extends Model & YamlCodec>
     public YamlModelServiceBuilder<T> folder(File folder) {
         this.folder = folder;
         return this;
+    }
+
+    public YamlModelServiceBuilder<T> dataFolder(Plugin plugin, String child) {
+        return folder(new File(plugin.getDataFolder(), child));
     }
 
     public YamlModelServiceBuilder<T> dataFolder(Plugin plugin) {
