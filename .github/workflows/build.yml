@@ -23,5 +23,5 @@ jobs:
                 env:
                     PUBLIC_REPO_USER: '${{ secrets.PUBLIC_REPO_USER }}'
                     PUBLIC_REPO_PASSWORD: '${{ secrets.PUBLIC_REPO_PASSWORD }}'
-                    ORG_GRADLE_PROJECT_CosmoLibsUsername: '${{ secrets.COSMO_LIBS_USERNAME }}'
-                    ORG_GRADLE_PROJECT_CosmoLibsPassword: '${{ secrets.COSMO_LIBS_PASSWORD }}'
+                    org.gradle.project.CosmoLibsUsername: '${{ secrets.COSMO_LIBS_USERNAME }}'
+                    org.gradle.project.CosmoLibsPassword: '${{ secrets.COSMO_LIBS_PASSWORD }}'
