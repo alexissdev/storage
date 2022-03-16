@@ -12,12 +12,10 @@ jobs:
                 with:
                     java-version: 8
             -   name: 'build'
-                run: './gradlew build'
+                run: './gradlew build -PCosmoLibsUsername=${{ secrets.COSMO_LIBS_USERNAME }} -PCosmoLibsPassword=${{ secrets.COSMO_LIBS_PASSWORD }}'
             -   name: 'publish'
                 if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-                run: './gradlew publish'
+                run: './gradlew publish -PCosmoLibsUsername=${{ secrets.COSMO_LIBS_USERNAME }} -PCosmoLibsPassword=${{ secrets.COSMO_LIBS_PASSWORD }}'
                 env:
                     PUBLIC_REPO_USER: '${{ secrets.PUBLIC_REPO_USER }}'
                     PUBLIC_REPO_PASSWORD: '${{ secrets.PUBLIC_REPO_PASSWORD }}'
-                    CosmoLibsUsername: '${{ secrets.COSMO_LIBS_USERNAME }}'
-                    CosmoLibsPassword: '${{ secrets.COSMO_LIBS_PASSWORD }}'
