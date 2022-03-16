@@ -19,3 +19,5 @@ jobs:
                 env:
                     PUBLIC_REPO_USER: '${{ secrets.PUBLIC_REPO_USER }}'
                     PUBLIC_REPO_PASSWORD: '${{ secrets.PUBLIC_REPO_PASSWORD }}'
+                    CosmoLibsUsername: '${{ secrets.COSMO_LIBS_USERNAME }}'
+                    CosmoLibsPassword: '${{ secrets.COSMO_LIBS_PASSWORD }}'
