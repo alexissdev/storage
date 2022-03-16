@@ -6,6 +6,10 @@ plugins {
 
 repositories {
     mavenLocal()
+    maven("https://repo.cosmogrp.net/repository/libs-public/") {
+        name = "CosmoLibs"
+        credentials(PasswordCredentials::class)
+    }
     mavenCentral()
 }
 
