@@ -1,14 +1,14 @@
 package net.cosmogrp.storage.mongo.codec;
 
 import net.cosmogrp.storage.codec.ModelWriter;
-import net.cosmogrp.storage.codec.AbstractModelWriter;
+import net.cosmogrp.storage.codec.DelegateObjectModelWriter;
 import net.cosmogrp.storage.model.Model;
 import org.bson.Document;
 
 /**
  * It's a builder for documents
  */
-public class DocumentWriter extends AbstractModelWriter<Document> {
+public class DocumentWriter extends DelegateObjectModelWriter<Document> {
 
     private final Document document;
 
@@ -33,7 +33,7 @@ public class DocumentWriter extends AbstractModelWriter<Document> {
      * @return Nothing.
      */
     @Override
-    protected DocumentWriter write0(String field, Object value) {
+    public DocumentWriter writeObject(String field, Object value) {
         document.append(field, value);
         return this;
     }

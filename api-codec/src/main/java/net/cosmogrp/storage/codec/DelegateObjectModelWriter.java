@@ -5,45 +5,45 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class AbstractModelWriter<R>
+public abstract class DelegateObjectModelWriter<R>
         implements ModelWriter<R> {
 
     @Override
     public ModelWriter<R> write(String field, UUID uuid) {
-        return write(field, uuid.toString());
+        return writeObject(field, uuid.toString());
     }
 
     @Override
     public ModelWriter<R> write(String field, String value) {
-        return write0(field, value);
+        return writeObject(field, value);
     }
 
     @Override
     public ModelWriter<R> write(String field, int value) {
-        return write0(field, value);
+        return writeObject(field, value);
     }
 
     @Override
     public ModelWriter<R> write(String field, long value) {
-        return write0(field, value);
+        return writeObject(field, value);
     }
 
     @Override
     public ModelWriter<R> write(String field, double value) {
-        return write0(field, value);
+        return writeObject(field, value);
     }
 
     @Override
     public ModelWriter<R> write(String field, boolean value) {
-        return write0(field, value);
+        return writeObject(field, value);
     }
 
     @Override
     public ModelWriter<R> write(String field, ModelCodec<R> child) {
         if (child == null) {
-            return write0(field, null);
+            return writeObject(field, null);
         } else {
-            return write0(field, child.serialize());
+            return writeObject(field, child.serialize());
         }
     }
 
@@ -54,8 +54,6 @@ public abstract class AbstractModelWriter<R>
             documents.add(child.serialize());
         }
 
-        return write0(field, documents);
+        return writeObject(field, documents);
     }
-
-    protected abstract ModelWriter<R> write0(String field, Object value);
 }

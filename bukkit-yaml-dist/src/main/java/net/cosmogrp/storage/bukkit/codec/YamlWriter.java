@@ -1,13 +1,13 @@
 package net.cosmogrp.storage.bukkit.codec;
 
 import net.cosmogrp.storage.codec.ModelWriter;
-import net.cosmogrp.storage.codec.AbstractModelWriter;
+import net.cosmogrp.storage.codec.DelegateObjectModelWriter;
 import net.cosmogrp.storage.model.Model;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class YamlWriter extends AbstractModelWriter<Map<String, Object>> {
+public class YamlWriter extends DelegateObjectModelWriter<Map<String, Object>> {
 
     private final Map<String, Object> values;
 
@@ -25,7 +25,7 @@ public class YamlWriter extends AbstractModelWriter<Map<String, Object>> {
     }
 
     @Override
-    protected YamlWriter write0(String field, Object value) {
+    public YamlWriter writeObject(String field, Object value) {
         values.put(field, value);
         return this;
     }
