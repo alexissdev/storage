@@ -17,6 +17,8 @@ public interface ModelWriter<R> {
     ModelWriter<R> write(String field, double value);
     
     ModelWriter<R> write(String field, boolean value);
+
+    ModelWriter<R> writeObject(String field, Object value);
     
     ModelWriter<R> write(
             String field, 
