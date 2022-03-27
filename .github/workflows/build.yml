@@ -16,10 +16,10 @@ jobs:
                 with:
                     mongodb-version: '5.0'
             -   name: 'build'
-                run: './gradlew build -PCosmoLibsUsername=${{ secrets.COSMO_LIBS_USERNAME }} -PCosmoLibsPassword=${{ secrets.COSMO_LIBS_PASSWORD }}'
+                run: './gradlew build -PCosmoLibsUsername=${{ secrets.LIB_DEVELOP_USER }} -PCosmoLibsPassword=${{ secrets.LIB_DEVELOP_PASSWORD }}'
             -   name: 'publish'
                 if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-                run: './gradlew publish -PCosmoLibsUsername=${{ secrets.COSMO_LIBS_USERNAME }} -PCosmoLibsPassword=${{ secrets.COSMO_LIBS_PASSWORD }}'
+                run: './gradlew publish -PCosmoLibsUsername=${{ secrets.LIB_DEVELOP_USER }} -PCosmoLibsPassword=${{ secrets.LIB_DEVELOP_PASSWORD }}'
                 env:
-                    PUBLIC_REPO_USER: '${{ secrets.PUBLIC_REPO_USER }}'
-                    PUBLIC_REPO_PASSWORD: '${{ secrets.PUBLIC_REPO_PASSWORD }}'
+                    CI_USER: '${{ secrets.CI_USER }}'
+                    CI_PASSWORD: '${{ secrets.CI_PASSWORD }}'
