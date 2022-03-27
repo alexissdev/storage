@@ -1,12 +1,17 @@
 package net.cosmogrp.storage.codec;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 public interface ModelWriter<R> {
     
     ModelWriter<R> write(String field, UUID uuid);
+
+    default ModelWriter<R> write(String field, Date date) {
+        return write(field, date.getTime());
+    }
     
     ModelWriter<R> write(String field, String value);
     
