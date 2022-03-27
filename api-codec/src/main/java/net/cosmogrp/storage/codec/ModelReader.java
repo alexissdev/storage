@@ -41,6 +41,10 @@ public interface ModelReader<R> {
         return new Date(readLong(field));
     }
 
+    default <T extends Enum<T>> T readEnum(String field, Class<T> clazz) {
+        return Enum.valueOf(clazz, readString(field));
+    }
+
     /**
      * Reads a string from the document
      *
