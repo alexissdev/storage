@@ -21,5 +21,5 @@ jobs:
                 if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
                 run: './gradlew publish -PCosmoLibsUsername=${{ secrets.COSMO_LIBS_USER }} -PCosmoLibsPassword=${{ secrets.COSMO_LIBS_PASSWORD }}'
                 env:
-                    CI_USER: '${{ secrets.CI_USER }}'
-                    CI_PASSWORD: '${{ secrets.CI_PASSWORD }}'
+                    COSMO_CI_USER: '${{ secrets.COSMO_CI_USER }}'
+                    COSMO_CI_PASSWORD: '${{ secrets.COSMO_CI_PASSWORD }}'
