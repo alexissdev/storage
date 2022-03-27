@@ -14,6 +14,10 @@ public interface ModelWriter<R> {
     }
     
     ModelWriter<R> write(String field, String value);
+
+    default ModelWriter<R> write(String field, Enum<?> value) {
+        return write(field, value.name());
+    }
     
     ModelWriter<R> write(String field, int value);
     
