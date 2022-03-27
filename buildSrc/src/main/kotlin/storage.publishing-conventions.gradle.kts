@@ -16,12 +16,12 @@ publishing {
             }
 
             credentials {
-                val userKey = "USER"
-                val pwdKey = "PASSWORD"
-                username = project.properties["LIB_DEVELOP_$userKey"] as String?
-                    ?: System.getenv("CI_$userKey")
-                password = project.properties["LIB_DEVELOP_$pwdKey"] as String?
-                    ?: System.getenv("CI_$pwdKey")
+                val userKey = "COSMO_CI_USER"
+                val pwdKey = "COSMO_CI_PASSWORD"
+                username = project.properties[userKey] as String?
+                    ?: System.getenv(userKey)
+                password = project.properties[pwdKey] as String?
+                    ?: System.getenv(pwdKey)
             }
         }
     }
