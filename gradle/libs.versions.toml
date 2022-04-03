@@ -1,6 +1,6 @@
 [versions]
 annotations = "23.0.0"
-commons = "0.2.0"
+commons = "0.3.0"
 
 gson = "2.9.0"
 
