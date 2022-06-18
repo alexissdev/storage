@@ -10,8 +10,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
-import static net.cosmogrp.commons.Validate.notNull;
-import static net.cosmogrp.commons.Validate.state;
+import static net.cosmogrp.storage.util.Validate.notNull;
+import static net.cosmogrp.storage.util.Validate.state;
 
 public class YamlModelServiceBuilder<T extends Model & YamlCodec>
         extends LayoutModelServiceBuilder<T, YamlModelServiceBuilder<T>> {

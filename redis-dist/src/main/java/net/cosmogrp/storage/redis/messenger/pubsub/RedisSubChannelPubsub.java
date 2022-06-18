@@ -35,9 +35,7 @@ public class RedisSubChannelPubsub extends JedisPubSub {
         }
 
         // we can parse the message as a json object
-        @SuppressWarnings("deprecation")
-        JsonObject jsonMessage = new JsonParser()
-                .parse(message)
+        JsonObject jsonMessage = JsonParser.parseString(message)
                 .getAsJsonObject();
 
         String serverId = jsonMessage.get("server").getAsString();

@@ -1,6 +1,5 @@
 [versions]
 annotations = "23.0.0"
-commons = "0.3.0"
 
 gson = "2.9.0"
 
@@ -19,7 +18,6 @@ spigot = "1.8.8-R0.1-SNAPSHOT"
 
 [libraries]
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
-commons-validate = { module = "net.cosmogrp:commons-validate", name = "commons-validate", version.ref = "commons" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
