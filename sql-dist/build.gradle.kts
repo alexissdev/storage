@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":api"))
+    api(project(":storage-api"))
     api(libs.hikari)
     api(libs.jdbi)
 }

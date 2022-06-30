@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":api-codec"))
+    api(project(":storage-api-codec"))
     api(libs.mongo.driver)
 
-    testImplementation(project(":mongo-legacy-dist"))
+    testImplementation(project(":storage-mongo-legacy-dist"))
 }

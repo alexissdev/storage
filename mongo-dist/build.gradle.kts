@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":api"))
+    api(project(":storage-api"))
     api(libs.mongo.jack)
 }
