@@ -3,5 +3,6 @@ plugins {
 }
 
 dependencies {
+    api(project(":storage-api"))
     compileOnly(libs.gson)
 }

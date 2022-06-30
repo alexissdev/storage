@@ -1,4 +1,4 @@
-package team.unnamed.pixel.storage.gson;
+package team.unnamed.pixel.storage.gson.resolve;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
