@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class MongoModelService<T extends Model & DocumentCodec>
         extends RemoteModelService<T> {
@@ -65,14 +66,18 @@ public class MongoModelService<T extends Model & DocumentCodec>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         List<Document> documents = mongoCollection.find()
                 .into(new ArrayList<>());
 
         List<T> models = new ArrayList<>();
 
         for (Document document : documents) {
-            models.add(mongoModelParser.parse(DocumentReader.create(document)));
+            T model = mongoModelParser.parse(
+                    DocumentReader.create(document)
+            );
+            postLoadAction.accept(model);
+            models.add(model);
         }
 
         return models;

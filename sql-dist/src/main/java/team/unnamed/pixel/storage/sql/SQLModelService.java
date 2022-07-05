@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLModelService<T extends Model & MapSerializer>
@@ -71,7 +72,7 @@ public class SQLModelService<T extends Model & MapSerializer>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         try (Handle handle = connection.open()) {
             List<T> models = new ArrayList<>();
 
@@ -79,6 +80,7 @@ public class SQLModelService<T extends Model & MapSerializer>
                     .define("TABLE", table.getName())
                     .map(rowMapper)
             ) {
+                postLoadAction.accept(model);
                 models.add(model);
             }
 

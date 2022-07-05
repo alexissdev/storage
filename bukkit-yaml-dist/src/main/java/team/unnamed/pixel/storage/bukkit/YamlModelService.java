@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class YamlModelService<T extends Model & YamlCodec>
         extends RemoteModelService<T> {
@@ -57,7 +58,7 @@ public class YamlModelService<T extends Model & YamlCodec>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         File[] files = folder.listFiles();
 
         if (files == null) {
@@ -71,7 +72,10 @@ public class YamlModelService<T extends Model & YamlCodec>
                 continue;
             }
 
-            models.add(parse(file));
+            T model = parse(file);
+
+            postLoadAction.accept(model);
+            models.add(model);
         }
 
         return models;
