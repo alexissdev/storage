@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class GsonModelService<T extends Model>
         extends RemoteModelService<T> {
@@ -53,7 +54,7 @@ public class GsonModelService<T extends Model>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         File[] listFiles = folder.listFiles();
 
         if (listFiles == null) {
@@ -69,6 +70,7 @@ public class GsonModelService<T extends Model>
                 continue;
             }
 
+            postLoadAction.accept(model);
             models.add(model);
         }
 

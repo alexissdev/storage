@@ -86,10 +86,11 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         List<T> loadedModels = internalFindAll();
 
         for (T model : loadedModels) {
+            postLoadAction.accept(model);
             cacheModelService.saveSync(model);
         }
 

@@ -4,6 +4,7 @@ import team.unnamed.pixel.storage.model.Model;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface ModelService<T extends Model> {
 
@@ -24,7 +25,11 @@ public interface ModelService<T extends Model> {
      *
      * @return Nothing
      */
-    List<T> findAllSync();
+    default List<T> findAllSync() {
+        return findAllSync(t -> {});
+    }
+
+    List<T> findAllSync(Consumer<T> postLoadAction);
 
     /**
      * Save the model to the database and cache

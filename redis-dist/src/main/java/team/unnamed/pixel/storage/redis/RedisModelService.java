@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class RedisModelService<T extends Model>
         extends RemoteModelService<T> {
@@ -77,12 +78,15 @@ public class RedisModelService<T extends Model>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         List<String> values = redisCache.getAllValues(tableName);
         List<T> models = new ArrayList<>();
 
         for (String value : values) {
-            models.add(gson.fromJson(value, type));
+            T model = gson.fromJson(value, type);
+
+            postLoadAction.accept(model);
+            models.add(model);
         }
 
         return models;

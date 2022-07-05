@@ -6,6 +6,7 @@ import team.unnamed.pixel.storage.model.Model;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public abstract class AsyncModelService<T extends Model>
         implements ModelService<T> {
@@ -26,6 +27,10 @@ public abstract class AsyncModelService<T extends Model>
 
     public CompletableFuture<List<T>> findAll() {
         return CompletableFuture.supplyAsync(this::findAllSync, executor);
+    }
+
+    public CompletableFuture<List<T>> findAll(Consumer<T> postLoadAction) {
+        return CompletableFuture.supplyAsync(() -> findAllSync(postLoadAction), executor);
     }
 
     public CompletableFuture<Void> save(T model) {

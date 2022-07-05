@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class LocalModelService<T extends Model>
         implements ModelService<T> {
@@ -30,7 +31,7 @@ public class LocalModelService<T extends Model>
     }
 
     @Override
-    public List<T> findAllSync() {
+    public List<T> findAllSync(Consumer<T> postLoadAction) {
         return new ArrayList<>(cache.values());
     }
 
