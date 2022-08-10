@@ -39,4 +39,10 @@ public interface CachedModelService<T extends Model>
         uploadAllSync(t -> {});
     }
 
+    void saveAllSync(Consumer<T> preSaveAction);
+
+    default void saveAllSync() {
+        saveAllSync(t -> {});
+    }
+
 }

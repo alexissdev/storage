@@ -98,6 +98,15 @@ public abstract class CachedRemoteModelService<T extends Model>
     }
 
     @Override
+    public void saveAllSync(Consumer<T> preSaveAction) {
+        List<T> models = getAllSync();
+        for (T model : models) {
+            preSaveAction.accept(model);
+            internalSave(model);
+        }
+    }
+
+    @Override
     public void saveSync(T model) {
         saveInCache(model);
         internalSave(model);
