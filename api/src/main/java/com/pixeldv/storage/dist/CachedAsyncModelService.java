@@ -39,6 +39,10 @@ public abstract class CachedAsyncModelService<T extends Model>
         return CompletableFuture.runAsync(() -> uploadSync(model), executor);
     }
 
+    public CompletableFuture<Void> uploadAll() {
+        return uploadAll(t -> {});
+    }
+
     public CompletableFuture<Void> uploadAll(Consumer<T> preUploadAction) {
         return CompletableFuture.runAsync(() -> uploadAllSync(preUploadAction), executor);
     }
