@@ -40,6 +40,12 @@ public class GsonModelServiceBuilder<T extends Model>
         Validate.notNull(gson, "gson");
         Validate.notNull(folder, "folder");
 
+        if (!folder.exists()) {
+            Validate.state(folder.mkdirs(),
+                    "Failed to create folder: "
+                            + folder.getName());
+        }
+
         ModelService<T> modelService = new GsonModelService<>(
                 executor, gson,
                 type, folder
