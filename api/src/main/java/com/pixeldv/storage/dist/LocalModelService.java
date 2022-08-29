@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class LocalModelService<T extends Model>
@@ -16,8 +17,8 @@ public class LocalModelService<T extends Model>
 
     private final Map<String, T> cache;
 
-    private LocalModelService() {
-        this.cache = new HashMap<>();
+    private LocalModelService(Map<String, T> cache) {
+        this.cache = cache;
     }
 
     @Override
@@ -50,7 +51,15 @@ public class LocalModelService<T extends Model>
         return cache.remove(id);
     }
 
-    public static <T extends Model> LocalModelService<T> create() {
-        return new LocalModelService<>();
+    public static <T extends Model> LocalModelService<T> hashMap() {
+        return new LocalModelService<>(new HashMap<>());
+    }
+
+    public static <T extends Model> LocalModelService<T> concurrent() {
+        return new LocalModelService<>(new ConcurrentHashMap<>());
+    }
+
+    public static <T extends Model> LocalModelService<T> create(Map<String, T> cache) {
+        return new LocalModelService<>(cache);
     }
 }
