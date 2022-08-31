@@ -14,17 +14,27 @@ public class YamlWriter extends DelegateObjectModelWriter<Map<String, Object>> {
 
     private final Map<String, Object> values;
 
-    private YamlWriter() {
-        this.values = new HashMap<>();
+    private YamlWriter(Map<String, Object> values) {
+        this.values = values;
     }
 
     public static ModelWriter<Map<String, Object>> create() {
-        return new YamlWriter();
+        return new YamlWriter(new HashMap<>());
+    }
+
+    public static ModelWriter<Map<String, Object>> create(Map<String, Object> values) {
+        return new YamlWriter(values);
     }
 
     public static ModelWriter<Map<String, Object>> create(Model model) {
-        return new YamlWriter()
-                .write("id", model.getId());
+        return create(model, new HashMap<>());
+    }
+
+    public static ModelWriter<Map<String, Object>> create(
+            Model model,
+            Map<String, Object> values
+    ) {
+        return create(values).write("id", model.getId());
     }
 
     @Override
