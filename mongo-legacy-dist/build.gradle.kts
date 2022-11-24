@@ -5,6 +5,4 @@ plugins {
 dependencies {
     api(project(":storage-api-codec"))
     api(libs.mongo.driver)
-
-    testImplementation(project(":storage-mongo-legacy-dist"))
 }
