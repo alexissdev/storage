@@ -4,6 +4,5 @@ import java.util.Map;
 
 public interface MapSerializer {
 
-    Map<String, Object> toMap();
-
+	Map<String, Object> toMap();
 }

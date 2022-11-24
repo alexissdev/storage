@@ -7,6 +7,7 @@ import com.pixeldv.storage.bukkit.codec.YamlReader;
 import com.pixeldv.storage.dist.RemoteModelService;
 import com.pixeldv.storage.model.Model;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -18,111 +19,111 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class YamlModelService<T extends Model & YamlCodec>
-        extends RemoteModelService<T> {
+		extends RemoteModelService<T> {
 
-    private final File folder;
-    private final YamlModelParser<T> modelParser;
+	private final File folder;
+	private final YamlModelParser<T> modelParser;
 
-    protected YamlModelService(
-            Executor executor, File folder,
-            YamlModelParser<T> modelParser
-    ) {
-        super(executor);
-        this.folder = folder;
-        this.modelParser = modelParser;
-    }
+	protected YamlModelService(
+			Executor executor, File folder,
+			YamlModelParser<T> modelParser
+	) {
+		super(executor);
+		this.folder = folder;
+		this.modelParser = modelParser;
+	}
 
-    public static <T extends Model & YamlCodec>
-    YamlModelServiceBuilder<T> builder(Class<T> type) {
-        return new YamlModelServiceBuilder<>(type);
-    }
+	public static <T extends Model & YamlCodec>
+	YamlModelServiceBuilder<T> builder(Class<T> type) {
+		return new YamlModelServiceBuilder<>(type);
+	}
 
-    @Override
-    public @Nullable T findSync(String id) {
-        File file = createFile(id, false);
+	@Override
+	public @Nullable T findSync(@NotNull String id) {
+		File file = createFile(id, false);
 
-        if (!file.exists()) {
-            return null;
-        }
+		if (!file.exists()) {
+			return null;
+		}
 
-        return parse(file);
-    }
+		return parse(file);
+	}
 
-    @Override
-    public List<T> findSync(String field, String value) {
-        if (field.equals(ModelService.ID_FIELD)) {
-            return Collections.singletonList(findSync(value));
-        }
+	@Override
+	public List<T> findSync(@NotNull String field, @NotNull String value) {
+		if (field.equals(ModelService.ID_FIELD)) {
+			return Collections.singletonList(findSync(value));
+		}
 
-        return Collections.emptyList();
-    }
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<T> findAllSync(Consumer<T> postLoadAction) {
-        File[] files = folder.listFiles();
+	@Override
+	public List<T> findAllSync(Consumer<T> postLoadAction) {
+		File[] files = folder.listFiles();
 
-        if (files == null) {
-            return Collections.emptyList();
-        }
+		if (files == null) {
+			return Collections.emptyList();
+		}
 
-        List<T> models = new ArrayList<>(files.length);
+		List<T> models = new ArrayList<>(files.length);
 
-        for (File file : files) {
-            if (!file.getName().endsWith(".yml")) {
-                continue;
-            }
+		for (File file : files) {
+			if (!file.getName().endsWith(".yml")) {
+				continue;
+			}
 
-            T model = parse(file);
+			T model = parse(file);
 
-            postLoadAction.accept(model);
-            models.add(model);
-        }
+			postLoadAction.accept(model);
+			models.add(model);
+		}
 
-        return models;
-    }
+		return models;
+	}
 
-    private File createFile(String id, boolean create) {
-        File file = new File(folder, id + ".yml");
+	private File createFile(String id, boolean create) {
+		File file = new File(folder, id + ".yml");
 
-        if (create && !file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+		if (create && !file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-        return file;
-    }
+		return file;
+	}
 
-    private T parse(File file) {
-        YamlConfiguration configuration = YamlConfiguration
-                .loadConfiguration(file);
+	private T parse(File file) {
+		YamlConfiguration configuration = YamlConfiguration
+				                                  .loadConfiguration(file);
 
-        return modelParser.parse(YamlReader.create(configuration));
-    }
+		return modelParser.parse(YamlReader.create(configuration));
+	}
 
-    @Override
-    public void saveSync(T model) {
-        File file = createFile(model.getId(), true);
+	@Override
+	public void saveSync(@NotNull T model) {
+		File file = createFile(model.getId(), true);
 
-        YamlConfiguration configuration = new YamlConfiguration();
-        configuration.addDefaults(model.serialize());
-        configuration.options().copyDefaults(true);
+		YamlConfiguration configuration = new YamlConfiguration();
+		configuration.addDefaults(model.serialize());
+		configuration.options().copyDefaults(true);
 
-        try {
-            configuration.save(file);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Could not save model", e);
-        }
-    }
+		try {
+			configuration.save(file);
+		} catch (IOException e) {
+			throw new IllegalArgumentException("Could not save model", e);
+		}
+	}
 
-    @Override
-    public void deleteSync(T model) {
-        File file = createFile(model.getId(), false);
+	@Override
+	public void deleteSync(@NotNull T model) {
+		File file = createFile(model.getId(), false);
 
-        if (file.exists()) {
-            file.delete();
-        }
-    }
+		if (file.exists()) {
+			file.delete();
+		}
+	}
 }

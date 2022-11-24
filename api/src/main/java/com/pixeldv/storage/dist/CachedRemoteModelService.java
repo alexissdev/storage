@@ -3,6 +3,7 @@ package com.pixeldv.storage.dist;
 import com.pixeldv.storage.ModelService;
 import com.pixeldv.storage.model.Model;
 import com.pixeldv.storage.resolve.ResolverRegistry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -11,155 +12,154 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public abstract class CachedRemoteModelService<T extends Model>
-        extends CachedAsyncModelService<T> {
+		extends CachedAsyncModelService<T> {
 
-    protected final ModelService<T> cacheModelService;
-    protected final ResolverRegistry<T> resolverRegistry;
+	protected final ModelService<T> cacheModelService;
+	protected final ResolverRegistry<T> resolverRegistry;
 
-    public CachedRemoteModelService(
-            Executor executor,
-            ModelService<T> cacheModelService,
-            ResolverRegistry<T> resolverRegistry
-    ) {
-        super(executor);
-        this.cacheModelService = cacheModelService;
-        this.resolverRegistry = resolverRegistry;
-    }
+	public CachedRemoteModelService(
+			Executor executor,
+			ModelService<T> cacheModelService,
+			ResolverRegistry<T> resolverRegistry
+	) {
+		super(executor);
+		this.cacheModelService = cacheModelService;
+		this.resolverRegistry = resolverRegistry;
+	}
 
-    @Override
-    public @Nullable T findSync(String id) {
-        T model = internalFind(id);
+	@Override
+	public @Nullable T findSync(@NotNull String id) {
+		T model = internalFind(id);
 
-        if (model != null) {
-            // add to cache
-            cacheModelService.saveSync(model);
-        }
+		if (model != null) {
+			// add to cache
+			cacheModelService.saveSync(model);
+		}
 
-        return model;
-    }
+		return model;
+	}
 
-    @Override
-    public @Nullable T getSync(String id) {
-        return cacheModelService.findSync(id);
-    }
+	@Override
+	public @Nullable T getSync(@NotNull String id) {
+		return cacheModelService.findSync(id);
+	}
 
-    @Override
-    public List<T> getSync(String field, String value) {
-        Iterable<String> ids = resolverRegistry.resolve(field, value);
-        List<T> models = new ArrayList<>();
+	@Override
+	public List<T> getSync(@NotNull String field, @NotNull String value) {
+		Iterable<String> ids = resolverRegistry.resolve(field, value);
+		List<T> models = new ArrayList<>();
 
-        for (String id : ids) {
-            T model = getOrFindSync(id);
-            if (model != null) {
-                models.add(model);
-            }
-        }
+		for (String id : ids) {
+			T model = getOrFindSync(id);
+			if (model != null) {
+				models.add(model);
+			}
+		}
 
-        return models;
-    }
+		return models;
+	}
 
-    @Override
-    public @Nullable T getOrFindSync(String id) {
-        T model = getSync(id);
+	@Override
+	public @Nullable T getOrFindSync(@NotNull String id) {
+		T model = getSync(id);
 
-        if (model != null) {
-            return model;
-        }
+		if (model != null) {
+			return model;
+		}
 
-        return findSync(id);
-    }
+		return findSync(id);
+	}
 
-    @Override
-    public List<T> getOrFindSync(String field, String value) {
-        List<T> models = getSync(field, value);
+	@Override
+	public List<T> getOrFindSync(@NotNull String field, @NotNull String value) {
+		List<T> models = getSync(field, value);
 
-        if (models.isEmpty()) {
-            models = findSync(field, value);
-        }
+		if (models.isEmpty()) {
+			models = findSync(field, value);
+		}
 
-        return models;
-    }
+		return models;
+	}
 
-    @Override
-    public List<T> getAllSync() {
-        return cacheModelService.findAllSync();
-    }
+	@Override
+	public List<T> getAllSync() {
+		return cacheModelService.findAllSync();
+	}
 
-    @Override
-    public List<T> findAllSync(Consumer<T> postLoadAction) {
-        List<T> loadedModels = internalFindAll();
+	@Override
+	public List<T> findAllSync(Consumer<T> postLoadAction) {
+		List<T> loadedModels = internalFindAll();
 
-        for (T model : loadedModels) {
-            postLoadAction.accept(model);
-            cacheModelService.saveSync(model);
-        }
+		for (T model : loadedModels) {
+			postLoadAction.accept(model);
+			cacheModelService.saveSync(model);
+		}
 
-        return loadedModels;
-    }
+		return loadedModels;
+	}
 
-    @Override
-    public void saveAllSync(Consumer<T> preSaveAction) {
-        List<T> models = getAllSync();
-        for (T model : models) {
-            preSaveAction.accept(model);
-            internalSave(model);
-        }
-    }
+	@Override
+	public void saveAllSync(Consumer<T> preSaveAction) {
+		List<T> models = getAllSync();
+		for (T model : models) {
+			preSaveAction.accept(model);
+			internalSave(model);
+		}
+	}
 
-    @Override
-    public void saveSync(T model) {
-        saveInCache(model);
-        internalSave(model);
-    }
+	@Override
+	public void saveSync(@NotNull T model) {
+		saveInCache(model);
+		internalSave(model);
+	}
 
-    @Override
-    public void uploadSync(T model) {
-        deleteInCache(model);
-        internalSave(model);
-    }
+	@Override
+	public void uploadSync(@NotNull T model) {
+		deleteInCache(model);
+		internalSave(model);
+	}
 
-    @Override
-    public void uploadAllSync(Consumer<T> preUploadAction) {
-        List<T> models = cacheModelService.findAllSync();
-        for (T model : models) {
-            preUploadAction.accept(model);
-            uploadSync(model);
-        }
-    }
+	@Override
+	public void uploadAllSync(Consumer<T> preUploadAction) {
+		List<T> models = cacheModelService.findAllSync();
+		for (T model : models) {
+			preUploadAction.accept(model);
+			uploadSync(model);
+		}
+	}
 
-    @Override
-    public void deleteSync(T model) {
-        deleteInCache(model);
-        internalDelete(model);
-    }
+	@Override
+	public void deleteSync(@NotNull T model) {
+		deleteInCache(model);
+		internalDelete(model);
+	}
 
-    @Override
-    public T deleteSync(String id) {
-        T model = getOrFindSync(id);
+	@Override
+	public T deleteSync(@NotNull String id) {
+		T model = getOrFindSync(id);
 
-        if (model != null) {
-            deleteSync(model);
-        }
+		if (model != null) {
+			deleteSync(model);
+		}
 
-        return model;
-    }
+		return model;
+	}
 
-    public void saveInCache(T model) {
-        resolverRegistry.bind(model);
-        cacheModelService.saveSync(model);
-    }
+	public void saveInCache(T model) {
+		resolverRegistry.bind(model);
+		cacheModelService.saveSync(model);
+	}
 
-    public void deleteInCache(T model) {
-        cacheModelService.deleteSync(model);
-        resolverRegistry.unbind(model);
-    }
+	public void deleteInCache(T model) {
+		cacheModelService.deleteSync(model);
+		resolverRegistry.unbind(model);
+	}
 
-    protected abstract void internalSave(T model);
+	protected abstract void internalSave(T model);
 
-    protected abstract void internalDelete(T model);
+	protected abstract void internalDelete(T model);
 
-    protected abstract @Nullable T internalFind(String id);
+	protected abstract @Nullable T internalFind(String id);
 
-    protected abstract List<T> internalFindAll();
-
+	protected abstract List<T> internalFindAll();
 }

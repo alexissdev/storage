@@ -5,12 +5,12 @@ import com.pixeldv.storage.redis.channel.Channel;
 
 import java.io.Closeable;
 
-public interface Messenger extends Closeable {
+public interface Messenger
+		extends Closeable {
 
-    <T> Channel<T> getChannel(String name, TypeToken<T> type);
+	<T> Channel<T> getChannel(String name, TypeToken<T> type);
 
-    default <T> Channel<T> getChannel(String name, Class<T> type) {
-        return getChannel(name, TypeToken.get(type));
-    }
-
+	default <T> Channel<T> getChannel(String name, Class<T> type) {
+		return getChannel(name, TypeToken.get(type));
+	}
 }

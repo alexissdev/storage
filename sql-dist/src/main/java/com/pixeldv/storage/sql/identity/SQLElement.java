@@ -4,22 +4,21 @@ import java.util.List;
 
 public interface SQLElement {
 
-    boolean isPrimary();
+	boolean isPrimary();
 
-    boolean isNullable();
+	boolean isNullable();
 
-    boolean isUnique();
+	boolean isUnique();
 
-    String toParameter();
+	String toParameter();
 
-    String toDeclaration();
+	String toDeclaration();
 
-    String getColumn();
+	String getColumn();
 
-    boolean hasReference();
+	boolean hasReference();
 
-    DataType getType();
+	DataType getType();
 
-    List<SQLConstraint> getConstraints();
-
+	List<SQLConstraint> getConstraints();
 }

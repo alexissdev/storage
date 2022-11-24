@@ -1,16 +1,16 @@
 package com.pixeldv.storage.model;
 
 public abstract class AbstractModel
-        implements Model {
+		implements Model {
 
-    private final String id;
+	private final String id;
 
-    public AbstractModel(String id) {
-        this.id = id;
-    }
+	public AbstractModel(String id) {
+		this.id = id;
+	}
 
-    @Override
-    public String getId() {
-        return id;
-    }
+	@Override
+	public String getId() {
+		return id;
+	}
 }

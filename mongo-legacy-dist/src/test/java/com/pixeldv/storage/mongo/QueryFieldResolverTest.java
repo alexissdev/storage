@@ -10,22 +10,21 @@ import java.util.UUID;
 
 public class QueryFieldResolverTest {
 
-    @Test
-    public void test() {
-        CachedRemoteModelService<DummyModel> modelService =
-                TestHelper.create();
+	@Test
+	public void test() {
+		CachedRemoteModelService<DummyModel> modelService =
+				TestHelper.create();
 
-        for (int i = 0; i < 5; i++) {
-            UUID id = UUID.randomUUID();
+		for (int i = 0; i < 5; i++) {
+			UUID id = UUID.randomUUID();
 
-            modelService.saveSync(DummyModel
-                    .create(id.toString(), "a"));
-        }
+			modelService.saveSync(DummyModel
+					                      .create(id.toString(), "a"));
+		}
 
-        List<DummyModel> models = modelService
-                .getSync("someValue", "a");
+		List<DummyModel> models = modelService
+				                          .getSync("someValue", "a");
 
-        Assertions.assertEquals(5, models.size());
-    }
-
+		Assertions.assertEquals(5, models.size());
+	}
 }

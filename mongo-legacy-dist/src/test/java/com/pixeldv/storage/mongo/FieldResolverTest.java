@@ -12,32 +12,31 @@ import java.util.UUID;
 
 public class FieldResolverTest {
 
-    @Test
-    public void test() {
-        CachedRemoteModelService<DummyModel> modelService =
-                TestHelper.create();
+	@Test
+	public void test() {
+		CachedRemoteModelService<DummyModel> modelService =
+				TestHelper.create();
 
-        Map<String, UUID> someValues = new HashMap<>();
+		Map<String, UUID> someValues = new HashMap<>();
 
-        for (int i = 0; i < 5; i++) {
-            UUID id = UUID.randomUUID();
-            String someValue = i + "";
+		for (int i = 0; i < 5; i++) {
+			UUID id = UUID.randomUUID();
+			String someValue = i + "";
 
-            modelService.saveSync(DummyModel
-                    .create(id.toString(), someValue));
+			modelService.saveSync(DummyModel
+					                      .create(id.toString(), someValue));
 
-            someValues.put(someValue, id);
-        }
+			someValues.put(someValue, id);
+		}
 
-        List<DummyModel> models = modelService
-                .getSync("someValue", "1");
+		List<DummyModel> models = modelService
+				                          .getSync("someValue", "1");
 
-        for (DummyModel model : models) {
-            Assertions.assertEquals(
-                    someValues.get("1").toString(),
-                    model.getId()
-            );
-        }
-    }
-
+		for (DummyModel model : models) {
+			Assertions.assertEquals(
+					someValues.get("1").toString(),
+					model.getId()
+			);
+		}
+	}
 }

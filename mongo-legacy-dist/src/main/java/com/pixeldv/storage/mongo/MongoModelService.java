@@ -3,12 +3,13 @@ package com.pixeldv.storage.mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import com.pixeldv.storage.dist.RemoteModelService;
 import com.pixeldv.storage.model.Model;
 import com.pixeldv.storage.mongo.codec.DocumentCodec;
 import com.pixeldv.storage.mongo.codec.DocumentReader;
 import com.pixeldv.storage.mongo.codec.MongoModelParser;
-import com.pixeldv.storage.dist.RemoteModelService;
 import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,83 +18,82 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class MongoModelService<T extends Model & DocumentCodec>
-        extends RemoteModelService<T> {
+		extends RemoteModelService<T> {
 
-    private final MongoCollection<Document> mongoCollection;
-    private final MongoModelParser<T> mongoModelParser;
+	private final MongoCollection<Document> mongoCollection;
+	private final MongoModelParser<T> mongoModelParser;
 
-    protected MongoModelService(
-            Executor executor,
-            MongoCollection<Document> mongoCollection,
-            MongoModelParser<T> mongoModelParser
-    ) {
-        super(executor);
+	protected MongoModelService(
+			Executor executor,
+			MongoCollection<Document> mongoCollection,
+			MongoModelParser<T> mongoModelParser
+	) {
+		super(executor);
 
-        this.mongoCollection = mongoCollection;
-        this.mongoModelParser = mongoModelParser;
-    }
+		this.mongoCollection = mongoCollection;
+		this.mongoModelParser = mongoModelParser;
+	}
 
-    public static <T extends Model & DocumentCodec>
-    MongoModelServiceBuilder<T> builder(Class<T> type) {
-        return new MongoModelServiceBuilder<>(type);
-    }
+	public static <T extends Model & DocumentCodec> MongoModelServiceBuilder<T> builder(Class<T> type) {
+		return new MongoModelServiceBuilder<>(type);
+	}
 
-    @Override
-    public @Nullable T findSync(String id) {
-        Document document = mongoCollection
-                .find(Filters.eq("_id", id))
-                .first();
+	@Override
+	public @Nullable T findSync(@NotNull String id) {
+		Document document = mongoCollection
+				                    .find(Filters.eq("_id", id))
+				                    .first();
 
-        if (document == null) {
-            return null;
-        }
+		if (document == null) {
+			return null;
+		}
 
-        return mongoModelParser.parse(DocumentReader.create(document));
-    }
+		return mongoModelParser.parse(DocumentReader.create(document));
+	}
 
-    @Override
-    public List<T> findSync(String field, String value) {
-        List<T> models = new ArrayList<>();
+	@Override
+	public List<T> findSync(@NotNull String field, @NotNull String value) {
+		List<T> models = new ArrayList<>();
 
-        for (Document document : mongoCollection
-                .find(Filters.eq(field, value))) {
-            models.add(mongoModelParser
-                    .parse(DocumentReader
-                            .create(document)));
-        }
+		for (Document document : mongoCollection
+				                         .find(Filters.eq(field, value))) {
+			models.add(mongoModelParser
+					           .parse(DocumentReader
+							                  .create(document)));
+		}
 
-        return models;
-    }
+		return models;
+	}
 
-    @Override
-    public List<T> findAllSync(Consumer<T> postLoadAction) {
-        List<Document> documents = mongoCollection.find()
-                .into(new ArrayList<>());
+	@Override
+	public List<T> findAllSync(Consumer<T> postLoadAction) {
+		List<Document> documents = mongoCollection.find()
+				                           .into(new ArrayList<>());
 
-        List<T> models = new ArrayList<>();
+		List<T> models = new ArrayList<>();
 
-        for (Document document : documents) {
-            T model = mongoModelParser.parse(
-                    DocumentReader.create(document)
-            );
-            postLoadAction.accept(model);
-            models.add(model);
-        }
+		for (Document document : documents) {
+			T model = mongoModelParser.parse(
+					DocumentReader.create(document)
+			);
+			postLoadAction.accept(model);
+			models.add(model);
+		}
 
-        return models;
-    }
+		return models;
+	}
 
-    @Override
-    public void saveSync(T model) {
-        mongoCollection.replaceOne(
-                Filters.eq("_id", model.getId()),
-                model.serialize(),
-                new ReplaceOptions().upsert(true)
-        );
-    }
+	@Override
+	public void saveSync(@NotNull T model) {
+		mongoCollection.replaceOne(
+				Filters.eq("_id", model.getId()),
+				model.serialize(),
+				new ReplaceOptions().upsert(true)
+		);
+	}
 
-    @Override
-    public void deleteSync(T model) {
-        mongoCollection.deleteOne(Filters.eq("_id", model.getId()));
-    }
+	@Override
+	public void deleteSync(@NotNull T model) {
+		mongoCollection.deleteOne(Filters.eq("_id", model.getId()));
+	}
 }

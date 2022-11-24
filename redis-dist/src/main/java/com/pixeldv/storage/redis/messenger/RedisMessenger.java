@@ -13,68 +13,68 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
-public class RedisMessenger implements Messenger {
+public class RedisMessenger
+		implements Messenger {
 
-    private final String parentChannel;
-    private final String serverId;
-    private final Gson gson;
+	private final String parentChannel;
+	private final String serverId;
+	private final Gson gson;
 
-    private final JedisPool messengerPool;
+	private final JedisPool messengerPool;
 
-    private final Map<String, RedisChannel<?>> channels;
+	private final Map<String, RedisChannel<?>> channels;
 
-    private final JedisPubSub pubSub;
+	private final JedisPubSub pubSub;
 
-    public RedisMessenger(
-            String parentChannel, String serverId,
-            Executor executor, Gson gson,
-            JedisPool messengerPool,
-            Jedis listenerConnection
-    ) {
-        this.parentChannel = parentChannel;
-        this.serverId = serverId;
-        this.gson = gson;
-        this.messengerPool = messengerPool;
+	public RedisMessenger(
+			String parentChannel, String serverId,
+			Executor executor, Gson gson,
+			JedisPool messengerPool,
+			Jedis listenerConnection
+	) {
+		this.parentChannel = parentChannel;
+		this.serverId = serverId;
+		this.gson = gson;
+		this.messengerPool = messengerPool;
 
-        this.channels = new ConcurrentHashMap<>();
-        pubSub = new RedisSubChannelPubsub(parentChannel, serverId, gson, channels);
+		this.channels = new ConcurrentHashMap<>();
+		pubSub = new RedisSubChannelPubsub(parentChannel, serverId, gson, channels);
 
-        executor.execute(() ->
-                listenerConnection.subscribe(
-                        pubSub, parentChannel
-                ));
-    }
+		executor.execute(() ->
+				                 listenerConnection.subscribe(
+						                 pubSub, parentChannel
+				                 ));
+	}
 
-    @Override
-    public <T> Channel<T> getChannel(String name, TypeToken<T> type) {
-        @SuppressWarnings("unchecked")
-        RedisChannel<T> channel = (RedisChannel<T>) channels.get(name);
+	@Override
+	public <T> Channel<T> getChannel(String name, TypeToken<T> type) {
+		@SuppressWarnings("unchecked")
+		RedisChannel<T> channel = (RedisChannel<T>) channels.get(name);
 
-        if (channel == null) {
-            channel = new RedisChannel<>(
-                    parentChannel, serverId, name, type,
-                    this, messengerPool, gson
-            );
+		if (channel == null) {
+			channel = new RedisChannel<>(
+					parentChannel, serverId, name, type,
+					this, messengerPool, gson
+			);
 
-            channels.put(name, channel);
-        } else {
-            if (!channel.getType().equals(type)) {
-                throw new IllegalArgumentException(
-                        "Channel type mismatch"
-                );
-            }
-        }
+			channels.put(name, channel);
+		} else {
+			if (!channel.getType().equals(type)) {
+				throw new IllegalArgumentException(
+						"Channel type mismatch"
+				);
+			}
+		}
 
-        return channel;
-    }
+		return channel;
+	}
 
-    @Override
-    public void close() {
-        channels.clear();
+	@Override
+	public void close() {
+		channels.clear();
 
-        if (pubSub.isSubscribed()) {
-            pubSub.unsubscribe();
-        }
-    }
-
+		if (pubSub.isSubscribed()) {
+			pubSub.unsubscribe();
+		}
+	}
 }

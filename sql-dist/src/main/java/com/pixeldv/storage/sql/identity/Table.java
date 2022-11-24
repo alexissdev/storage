@@ -2,14 +2,13 @@ package com.pixeldv.storage.sql.identity;
 
 public interface Table {
 
-    String getName();
+	String getName();
 
-    String getPrimaryColumn();
+	String getPrimaryColumn();
 
-    String getColumns();
+	String getColumns();
 
-    String getParameters();
+	String getParameters();
 
-    String getDeclaration();
-
+	String getDeclaration();
 }

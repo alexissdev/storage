@@ -7,30 +7,29 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.Closeable;
 
-public interface Redis extends Closeable {
+public interface Redis
+		extends Closeable {
 
-    Messenger getMessenger();
+	Messenger getMessenger();
 
-    JedisPool getRawConnection();
+	JedisPool getRawConnection();
 
-    Jedis getListenerConnection();
+	Jedis getListenerConnection();
 
-    interface Builder {
+	interface Builder {
 
-        Builder setParentChannel(String parentChannel);
+		Builder setParentChannel(String parentChannel);
 
-        Builder setServerId(String id);
+		Builder setServerId(String id);
 
-        Builder setGson(Gson gson);
+		Builder setGson(Gson gson);
 
-        Builder setJedisPool(JedisPool jedisPool);
+		Builder setJedisPool(JedisPool jedisPool);
 
-        Builder setJedis(JedisInstance jedis);
+		Builder setJedis(JedisInstance jedis);
 
-        Builder setListenerConnection(Jedis listenerConnection);
+		Builder setListenerConnection(Jedis listenerConnection);
 
-        Redis build();
-
-    }
-
+		Redis build();
+	}
 }
