@@ -73,7 +73,7 @@ public class SQLModelService<T extends Model & MapSerializer>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		try (Handle handle = connection.open()) {
 			List<T> models = new ArrayList<>();
 

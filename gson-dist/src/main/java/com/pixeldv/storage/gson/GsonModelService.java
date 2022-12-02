@@ -55,7 +55,7 @@ public class GsonModelService<T extends Model>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		File[] listFiles = folder.listFiles();
 
 		if (listFiles == null) {

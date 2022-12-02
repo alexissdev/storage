@@ -59,7 +59,7 @@ public class YamlModelService<T extends Model & YamlCodec>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		File[] files = folder.listFiles();
 
 		if (files == null) {

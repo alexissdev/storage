@@ -33,7 +33,7 @@ public class LocalModelService<T extends Model>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		return new ArrayList<>(cache.values());
 	}
 

@@ -79,7 +79,7 @@ public class RedisModelService<T extends Model>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		List<String> values = redisCache.getAllValues(tableName);
 		List<T> models = new ArrayList<>();
 

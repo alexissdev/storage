@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 public interface ModelService<T extends Model> {
 
+	Consumer<? extends Model> NOOP = model -> { };
 	String ID_FIELD = "id";
 
 	/**
@@ -28,11 +29,12 @@ public interface ModelService<T extends Model> {
 	 *
 	 * @return Nothing
 	 */
+	@SuppressWarnings("unchecked")
 	default @Nullable List<T> findAllSync() {
-		return findAllSync(null);
+		return findAllSync((Consumer<T>) NOOP);
 	}
 
-	@Nullable List<T> findAllSync(@Nullable Consumer<T> postLoadAction);
+	@Nullable List<T> findAllSync(@NotNull Consumer<T> postLoadAction);
 
 	/**
 	 * Save the model to the database and cache if it's not already there.

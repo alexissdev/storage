@@ -66,7 +66,7 @@ public class MongoModelService<T extends Model & DocumentCodec>
 	}
 
 	@Override
-	public List<T> findAllSync(Consumer<T> postLoadAction) {
+	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		List<Document> documents = mongoCollection.find()
 				                           .into(new ArrayList<>());
 
