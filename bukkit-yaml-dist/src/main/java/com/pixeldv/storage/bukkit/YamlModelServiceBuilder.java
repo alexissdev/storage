@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 
 public class YamlModelServiceBuilder<T extends Model & YamlCodec>
-		extends LayoutModelServiceBuilder<T, YamlModelServiceBuilder<T>> {
+	extends LayoutModelServiceBuilder<T, YamlModelServiceBuilder<T>> {
 
 	private YamlModelParser<T> modelParser;
 	private File folder;
@@ -51,20 +51,21 @@ public class YamlModelServiceBuilder<T extends Model & YamlCodec>
 		Validate.notNull(folder, "folder");
 
 		if (!folder.exists()) {
-			Validate.state(folder.mkdirs(),
-			               "Failed to create folder: "
-			               + folder.getName());
+			Validate.state(
+				folder.mkdirs(),
+				"Failed to create folder: "
+				+ folder.getName());
 		}
 
 		YamlModelService<T> modelService =
-				new YamlModelService<>(executor, folder, modelParser);
+			new YamlModelService<>(executor, folder, modelParser);
 
 		if (cacheModelService == null) {
 			return modelService;
 		} else {
 			return new DelegatedCachedModelService<>(
-					executor, cacheModelService,
-					resolverRegistry, modelService
+				executor, cacheModelService,
+				resolverRegistry, modelService
 			);
 		}
 	}

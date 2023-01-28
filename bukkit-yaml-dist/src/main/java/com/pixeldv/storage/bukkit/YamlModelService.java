@@ -19,14 +19,14 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class YamlModelService<T extends Model & YamlCodec>
-		extends RemoteModelService<T> {
+	extends RemoteModelService<T> {
 
 	private final File folder;
 	private final YamlModelParser<T> modelParser;
 
 	protected YamlModelService(
-			Executor executor, File folder,
-			YamlModelParser<T> modelParser
+		Executor executor, File folder,
+		YamlModelParser<T> modelParser
 	) {
 		super(executor);
 		this.folder = folder;
@@ -69,7 +69,8 @@ public class YamlModelService<T extends Model & YamlCodec>
 		List<T> models = new ArrayList<>(files.length);
 
 		for (File file : files) {
-			if (!file.getName().endsWith(".yml")) {
+			if (!file.getName()
+				     .endsWith(".yml")) {
 				continue;
 			}
 
@@ -98,7 +99,7 @@ public class YamlModelService<T extends Model & YamlCodec>
 
 	private T parse(File file) {
 		YamlConfiguration configuration = YamlConfiguration
-				                                  .loadConfiguration(file);
+			                                  .loadConfiguration(file);
 
 		return modelParser.parse(YamlReader.create(configuration));
 	}
@@ -109,7 +110,8 @@ public class YamlModelService<T extends Model & YamlCodec>
 
 		YamlConfiguration configuration = new YamlConfiguration();
 		configuration.addDefaults(model.serialize());
-		configuration.options().copyDefaults(true);
+		configuration.options()
+			.copyDefaults(true);
 
 		try {
 			configuration.save(file);

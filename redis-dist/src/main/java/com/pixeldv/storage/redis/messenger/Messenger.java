@@ -6,7 +6,7 @@ import com.pixeldv.storage.redis.channel.Channel;
 import java.io.Closeable;
 
 public interface Messenger
-		extends Closeable {
+	extends Closeable {
 
 	<T> Channel<T> getChannel(String name, TypeToken<T> type);
 

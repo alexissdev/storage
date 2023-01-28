@@ -10,7 +10,7 @@ import com.pixeldv.storage.util.Validate;
 import org.jdbi.v3.core.mapper.RowMapper;
 
 public class SQLModelServiceBuilder<T extends Model & MapSerializer>
-		extends LayoutModelServiceBuilder<T, SQLModelServiceBuilder<T>> {
+	extends LayoutModelServiceBuilder<T, SQLModelServiceBuilder<T>> {
 
 	private SQLClient sqlClient;
 	private RowMapper<T> rowMapper;
@@ -49,14 +49,14 @@ public class SQLModelServiceBuilder<T extends Model & MapSerializer>
 
 		if (cacheModelService == null) {
 			return new SQLModelService<>(
-					executor, sqlClient,
-					rowMapper, table
+				executor, sqlClient,
+				rowMapper, table
 			);
 		} else {
 			return new CachedSQLModelService<>(
-					executor, cacheModelService,
-					resolverRegistry, sqlClient,
-					rowMapper, table
+				executor, cacheModelService,
+				resolverRegistry, sqlClient,
+				rowMapper, table
 			);
 		}
 	}

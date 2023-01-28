@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPool;
 import java.io.Closeable;
 
 public interface Redis
-		extends Closeable {
+	extends Closeable {
 
 	Messenger getMessenger();
 

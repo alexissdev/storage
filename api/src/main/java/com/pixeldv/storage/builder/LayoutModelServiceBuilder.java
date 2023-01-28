@@ -8,8 +8,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public abstract class LayoutModelServiceBuilder
-		<T extends Model, O extends ModelServiceBuilder<T>>
-		implements ModelServiceBuilder<T> {
+	<T extends Model, O extends ModelServiceBuilder<T>>
+	implements ModelServiceBuilder<T> {
 
 	protected final Class<T> type;
 	protected Executor executor;

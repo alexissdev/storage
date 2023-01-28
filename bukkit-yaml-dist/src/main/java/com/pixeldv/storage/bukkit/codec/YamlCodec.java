@@ -5,5 +5,5 @@ import com.pixeldv.storage.codec.ModelCodec;
 import java.util.Map;
 
 public interface YamlCodec
-		extends ModelCodec<Map<String, Object>> {
+	extends ModelCodec<Map<String, Object>> {
 }

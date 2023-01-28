@@ -9,7 +9,7 @@ import com.pixeldv.storage.redis.connection.RedisCache;
 import com.pixeldv.storage.util.Validate;
 
 public class RedisModelServiceBuilder<T extends Model>
-		extends LayoutModelServiceBuilder<T, RedisModelServiceBuilder<T>> {
+	extends LayoutModelServiceBuilder<T, RedisModelServiceBuilder<T>> {
 
 	private Gson gson;
 	private String tableName;
@@ -57,17 +57,17 @@ public class RedisModelServiceBuilder<T extends Model>
 		}
 
 		ModelService<T> modelService = new RedisModelService<>(
-				executor, type, gson,
-				redisCache, tableName,
-				expireAfterSave
+			executor, type, gson,
+			redisCache, tableName,
+			expireAfterSave
 		);
 
 		if (cacheModelService == null) {
 			return modelService;
 		} else {
 			return new DelegatedCachedModelService<>(
-					executor, cacheModelService,
-					resolverRegistry, modelService
+				executor, cacheModelService,
+				resolverRegistry, modelService
 			);
 		}
 	}

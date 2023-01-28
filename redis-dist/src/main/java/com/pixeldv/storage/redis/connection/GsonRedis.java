@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 
 public class GsonRedis
-		implements Redis {
+	implements Redis {
 
 	private final JedisPool jedisPool;
 	private final Jedis listenerConnection;
@@ -19,17 +19,17 @@ public class GsonRedis
 	private Messenger messenger;
 
 	protected GsonRedis(
-			String parentChannel, String serverId,
-			Executor executor, Gson gson,
-			JedisPool jedisPool,
-			Jedis listenerConnection
+		String parentChannel, String serverId,
+		Executor executor, Gson gson,
+		JedisPool jedisPool,
+		Jedis listenerConnection
 	) {
 		this.jedisPool = jedisPool;
 		this.listenerConnection = listenerConnection;
 
 		this.messenger = new RedisMessenger(
-				parentChannel, serverId, executor,
-				gson, jedisPool, listenerConnection
+			parentChannel, serverId, executor,
+			gson, jedisPool, listenerConnection
 		);
 	}
 
@@ -61,12 +61,13 @@ public class GsonRedis
 	}
 
 	static class RedisBuilder
-			implements Builder {
+		implements Builder {
 
 		private final Executor executor;
 
 		private String parentChannel;
-		private String serverId = UUID.randomUUID().toString();
+		private String serverId = UUID.randomUUID()
+			                          .toString();
 
 		private Gson gson;
 		private JedisPool jedisPool;
@@ -121,9 +122,9 @@ public class GsonRedis
 			}
 
 			return new GsonRedis(
-					parentChannel, serverId,
-					executor, gson, jedisPool,
-					listenerConnection
+				parentChannel, serverId,
+				executor, gson, jedisPool,
+				listenerConnection
 			);
 		}
 	}

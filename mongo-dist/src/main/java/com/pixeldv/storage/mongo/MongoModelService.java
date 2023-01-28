@@ -15,15 +15,15 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class MongoModelService<T extends Model>
-		extends CachedRemoteModelService<T> {
+	extends CachedRemoteModelService<T> {
 
 	private final JacksonMongoCollection<T> collection;
 
 	public MongoModelService(
-			Executor executor,
-			ModelService<T> cacheModelService,
-			ResolverRegistry<T> resolverRegistry,
-			JacksonMongoCollection<T> collection
+		Executor executor,
+		ModelService<T> cacheModelService,
+		ResolverRegistry<T> resolverRegistry,
+		JacksonMongoCollection<T> collection
 	) {
 		super(executor, cacheModelService, resolverRegistry);
 		this.collection = collection;
@@ -32,8 +32,8 @@ public class MongoModelService<T extends Model>
 	@Override
 	protected void internalSave(T model) {
 		collection.replaceOne(
-				Filters.eq("_id", model.getId()),
-				model, new ReplaceOptions().upsert(true)
+			Filters.eq("_id", model.getId()),
+			model, new ReplaceOptions().upsert(true)
 		);
 	}
 
@@ -50,12 +50,12 @@ public class MongoModelService<T extends Model>
 	@Override
 	protected List<T> internalFindAll() {
 		return collection.find()
-				       .into(new ArrayList<>());
+			       .into(new ArrayList<>());
 	}
 
 	@Override
 	public List<T> findSync(@NotNull String field, @NotNull String value) {
 		return collection.find(Filters.eq(field, value))
-				       .into(new ArrayList<>());
+			       .into(new ArrayList<>());
 	}
 }

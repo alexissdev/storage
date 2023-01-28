@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 public class RedisMessenger
-		implements Messenger {
+	implements Messenger {
 
 	private final String parentChannel;
 	private final String serverId;
@@ -27,10 +27,10 @@ public class RedisMessenger
 	private final JedisPubSub pubSub;
 
 	public RedisMessenger(
-			String parentChannel, String serverId,
-			Executor executor, Gson gson,
-			JedisPool messengerPool,
-			Jedis listenerConnection
+		String parentChannel, String serverId,
+		Executor executor, Gson gson,
+		JedisPool messengerPool,
+		Jedis listenerConnection
 	) {
 		this.parentChannel = parentChannel;
 		this.serverId = serverId;
@@ -41,9 +41,9 @@ public class RedisMessenger
 		pubSub = new RedisSubChannelPubsub(parentChannel, serverId, gson, channels);
 
 		executor.execute(() ->
-				                 listenerConnection.subscribe(
-						                 pubSub, parentChannel
-				                 ));
+			                 listenerConnection.subscribe(
+				                 pubSub, parentChannel
+			                 ));
 	}
 
 	@Override
@@ -53,15 +53,16 @@ public class RedisMessenger
 
 		if (channel == null) {
 			channel = new RedisChannel<>(
-					parentChannel, serverId, name, type,
-					this, messengerPool, gson
+				parentChannel, serverId, name, type,
+				this, messengerPool, gson
 			);
 
 			channels.put(name, channel);
 		} else {
-			if (!channel.getType().equals(type)) {
+			if (!channel.getType()
+				     .equals(type)) {
 				throw new IllegalArgumentException(
-						"Channel type mismatch"
+					"Channel type mismatch"
 				);
 			}
 		}

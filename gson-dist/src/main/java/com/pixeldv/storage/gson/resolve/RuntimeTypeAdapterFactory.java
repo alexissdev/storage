@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RuntimeTypeAdapterFactory<T>
-		implements TypeAdapterFactory {
+	implements TypeAdapterFactory {
 
 	private final Class<?> baseType;
 	private final String typeFieldName;
@@ -25,7 +25,8 @@ public class RuntimeTypeAdapterFactory<T>
 	private final Map<Class<?>, String> subtypeToLabel = new LinkedHashMap<>();
 	private final boolean maintainType;
 
-	private RuntimeTypeAdapterFactory(Class<?> baseType, String typeFieldName, boolean maintainType) {
+	private RuntimeTypeAdapterFactory(Class<?> baseType, String typeFieldName,
+	                                  boolean maintainType) {
 		if (typeFieldName == null || baseType == null) {
 			throw new NullPointerException();
 		}
@@ -35,23 +36,29 @@ public class RuntimeTypeAdapterFactory<T>
 	}
 
 	/**
-	 * Creates a new runtime type adapter using for {@code baseType} using {@code typeFieldName} as the type field name.
-	 * Type field names are case-sensitive. {@code maintainType} flag decide if the type will be stored in pojo or not.
+	 * Creates a new runtime type adapter using for {@code baseType} using {@code typeFieldName} as
+	 * the type field name. Type field names are case-sensitive. {@code maintainType} flag decide if
+	 * the type will be stored in pojo or not.
 	 */
-	public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType, String typeFieldName, boolean maintainType) {
+	public static <T> RuntimeTypeAdapterFactory<T> of(
+		Class<T> baseType,
+		String typeFieldName,
+		boolean maintainType
+	) {
 		return new RuntimeTypeAdapterFactory<>(baseType, typeFieldName, maintainType);
 	}
 
 	/**
-	 * Creates a new runtime type adapter using for {@code baseType} using {@code typeFieldName} as the type field name.
-	 * Type field names are case-sensitive.
+	 * Creates a new runtime type adapter using for {@code baseType} using {@code typeFieldName} as
+	 * the type field name. Type field names are case-sensitive.
 	 */
 	public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType, String typeFieldName) {
 		return new RuntimeTypeAdapterFactory<>(baseType, typeFieldName, false);
 	}
 
 	/**
-	 * Creates a new runtime type adapter for {@code baseType} using {@code "type"} as the type field name.
+	 * Creates a new runtime type adapter for {@code baseType} using {@code "type"} as the type field
+	 * name.
 	 */
 	public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType) {
 		return new RuntimeTypeAdapterFactory<>(baseType, "type", false);
@@ -61,7 +68,7 @@ public class RuntimeTypeAdapterFactory<T>
 	 * Registers {@code type} identified by {@code label}. Labels are case-sensitive.
 	 *
 	 * @throws IllegalArgumentException
-	 * 		if either {@code type} or {@code label} have already been registered on this type adapter.
+	 * 	if either {@code type} or {@code label} have already been registered on this type adapter.
 	 */
 	public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type, String label) {
 		if (type == null || label == null) {
@@ -76,10 +83,11 @@ public class RuntimeTypeAdapterFactory<T>
 	}
 
 	/**
-	 * Registers {@code type} identified by its {@link Class#getSimpleName simple name}. Labels are case-sensitive.
+	 * Registers {@code type} identified by its {@link Class#getSimpleName simple name}. Labels are
+	 * case-sensitive.
 	 *
 	 * @throws IllegalArgumentException
-	 * 		if either {@code type} or its simple name have already been registered on this type adapter.
+	 * 	if either {@code type} or its simple name have already been registered on this type adapter.
 	 */
 	public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type) {
 		return registerSubtype(type, type.getSimpleName());
@@ -91,9 +99,9 @@ public class RuntimeTypeAdapterFactory<T>
 		}
 
 		final Map<String, TypeAdapter<?>> labelToDelegate
-				= new LinkedHashMap<>();
+			= new LinkedHashMap<>();
 		final Map<Class<?>, TypeAdapter<?>> subtypeToDelegate
-				= new LinkedHashMap<>();
+			= new LinkedHashMap<>();
 		for (Map.Entry<String, Class<?>> entry : labelToSubtype.entrySet()) {
 			TypeAdapter<?> delegate = gson.getDelegateAdapter(this, TypeToken.get(entry.getValue()));
 			labelToDelegate.put(entry.getKey(), delegate);
@@ -106,14 +114,17 @@ public class RuntimeTypeAdapterFactory<T>
 				JsonElement jsonElement = Streams.parse(in);
 				JsonElement labelJsonElement;
 				if (maintainType) {
-					labelJsonElement = jsonElement.getAsJsonObject().get(typeFieldName);
+					labelJsonElement = jsonElement.getAsJsonObject()
+						                   .get(typeFieldName);
 				} else {
-					labelJsonElement = jsonElement.getAsJsonObject().remove(typeFieldName);
+					labelJsonElement = jsonElement.getAsJsonObject()
+						                   .remove(typeFieldName);
 				}
 
 				if (labelJsonElement == null) {
 					throw new JsonParseException("cannot deserialize " + baseType
-					                             + " because it does not define a field named " + typeFieldName);
+					                             + " because it does not define a field named " +
+					                             typeFieldName);
 				}
 				String label = labelJsonElement.getAsString();
 				@SuppressWarnings("unchecked") // registration requires that subtype extends T
@@ -135,7 +146,8 @@ public class RuntimeTypeAdapterFactory<T>
 					throw new JsonParseException("cannot serialize " + srcType.getName()
 					                             + "; did you forget to register a subtype?");
 				}
-				JsonObject jsonObject = delegate.toJsonTree(value).getAsJsonObject();
+				JsonObject jsonObject = delegate.toJsonTree(value)
+					                        .getAsJsonObject();
 
 				if (maintainType) {
 					Streams.write(jsonObject, out);
@@ -146,7 +158,8 @@ public class RuntimeTypeAdapterFactory<T>
 
 				if (jsonObject.has(typeFieldName)) {
 					throw new JsonParseException("cannot serialize " + srcType.getName()
-					                             + " because it already defines a field named " + typeFieldName);
+					                             + " because it already defines a field named " +
+					                             typeFieldName);
 				}
 				clone.add(typeFieldName, new JsonPrimitive(label));
 

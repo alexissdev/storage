@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class YamlWriter
-		extends DelegateObjectModelWriter<Map<String, Object>> {
+	extends DelegateObjectModelWriter<Map<String, Object>> {
 
 	private final Map<String, Object> values;
 
@@ -32,20 +32,20 @@ public class YamlWriter
 	}
 
 	public static ModelWriter<Map<String, Object>> create(
-			Model model,
-			Map<String, Object> values
+		Model model,
+		Map<String, Object> values
 	) {
 		return create(values).write("id", model.getId());
 	}
 
 	@Override
 	public ModelWriter<Map<String, Object>> write(
-			String field,
-			Collection<? extends ModelCodec<Map<String, Object>>> children
+		String field,
+		Collection<? extends ModelCodec<Map<String, Object>>> children
 	) {
 		Map<String, Object> values = new HashMap<>();
 		Iterator<? extends ModelCodec<Map<String, Object>>> iterator
-				= children.iterator();
+			= children.iterator();
 
 		int i = 0;
 		while (iterator.hasNext()) {

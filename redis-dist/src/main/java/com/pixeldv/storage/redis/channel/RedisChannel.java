@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RedisChannel<T>
-		implements Channel<T> {
+	implements Channel<T> {
 
 	private final String parentChannel;
 	private final String serverId;
@@ -26,11 +26,11 @@ public class RedisChannel<T>
 	private final Gson gson;
 
 	public RedisChannel(
-			String parentChannel, String serverId,
-			String name, TypeToken<T> type,
-			Messenger messenger,
-			JedisPool jedisPool,
-			Gson gson
+		String parentChannel, String serverId,
+		String name, TypeToken<T> type,
+		Messenger messenger,
+		JedisPool jedisPool,
+		Gson gson
 	) {
 		this.parentChannel = parentChannel;
 		this.serverId = serverId;

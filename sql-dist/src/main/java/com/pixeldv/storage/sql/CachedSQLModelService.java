@@ -15,22 +15,22 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class CachedSQLModelService<T extends Model & MapSerializer>
-		extends CachedRemoteModelService<T> {
+	extends CachedRemoteModelService<T> {
 
 	private final SQLModelService<T> delegate;
 
 	protected CachedSQLModelService(
-			Executor executor,
-			ModelService<T> cacheModelService,
-			ResolverRegistry<T> resolverRegistry,
-			SQLClient client,
-			RowMapper<T> mapper,
-			Table table
+		Executor executor,
+		ModelService<T> cacheModelService,
+		ResolverRegistry<T> resolverRegistry,
+		SQLClient client,
+		RowMapper<T> mapper,
+		Table table
 	) {
 		super(executor, cacheModelService, resolverRegistry);
 		this.delegate = new SQLModelService<>(
-				executor, client,
-				mapper, table
+			executor, client,
+			mapper, table
 		);
 	}
 

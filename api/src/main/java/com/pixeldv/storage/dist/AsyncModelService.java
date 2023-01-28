@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public abstract class AsyncModelService<T extends Model>
-		implements ModelService<T> {
+	implements ModelService<T> {
 
 	protected final Executor executor;
 

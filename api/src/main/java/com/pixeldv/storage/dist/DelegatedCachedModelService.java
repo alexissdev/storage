@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class DelegatedCachedModelService<T extends Model>
-		extends CachedRemoteModelService<T> {
+	extends CachedRemoteModelService<T> {
 
 	protected final ModelService<T> delegate;
 
 	public DelegatedCachedModelService(
-			Executor executor,
-			ModelService<T> cacheModelService,
-			ResolverRegistry<T> resolverRegistry,
-			ModelService<T> delegate
+		Executor executor,
+		ModelService<T> cacheModelService,
+		ResolverRegistry<T> resolverRegistry,
+		ModelService<T> delegate
 	) {
 		super(executor, cacheModelService, resolverRegistry);
 		this.delegate = delegate;

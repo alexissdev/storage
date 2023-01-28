@@ -46,7 +46,8 @@ public class JedisBuilder {
 		Jedis jedis = new Jedis(host, port, timeout);
 
 		JedisPool jedisPool;
-		if (password == null || password.trim().isEmpty()) {
+		if (password == null || password.trim()
+			                        .isEmpty()) {
 			jedisPool = new JedisPool(config, host, port, timeout);
 		} else {
 			jedisPool = new JedisPool(config, host, port, timeout, password);

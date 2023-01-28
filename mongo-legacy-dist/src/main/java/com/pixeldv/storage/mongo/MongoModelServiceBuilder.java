@@ -12,7 +12,7 @@ import com.pixeldv.storage.util.Validate;
 import org.bson.Document;
 
 public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
-		extends LayoutModelServiceBuilder<T, MongoModelServiceBuilder<T>> {
+	extends LayoutModelServiceBuilder<T, MongoModelServiceBuilder<T>> {
 
 	private MongoDatabase database;
 	private String collectionName;
@@ -45,17 +45,17 @@ public class MongoModelServiceBuilder<T extends Model & DocumentCodec>
 		Validate.notNull(collectionName, "collectionName");
 
 		MongoCollection<Document> collection =
-				database.getCollection(collectionName);
+			database.getCollection(collectionName);
 
 		MongoModelService<T> modelService =
-				new MongoModelService<>(executor, collection, modelParser);
+			new MongoModelService<>(executor, collection, modelParser);
 
 		if (cacheModelService == null) {
 			return modelService;
 		} else {
 			return new DelegatedCachedModelService<>(
-					executor, cacheModelService,
-					resolverRegistry, modelService
+				executor, cacheModelService,
+				resolverRegistry, modelService
 			);
 		}
 	}

@@ -12,15 +12,15 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public abstract class CachedRemoteModelService<T extends Model>
-		extends CachedAsyncModelService<T> {
+	extends CachedAsyncModelService<T> {
 
 	protected final ModelService<T> cacheModelService;
 	protected final ResolverRegistry<T> resolverRegistry;
 
 	public CachedRemoteModelService(
-			Executor executor,
-			ModelService<T> cacheModelService,
-			ResolverRegistry<T> resolverRegistry
+		Executor executor,
+		ModelService<T> cacheModelService,
+		ResolverRegistry<T> resolverRegistry
 	) {
 		super(executor);
 		this.cacheModelService = cacheModelService;

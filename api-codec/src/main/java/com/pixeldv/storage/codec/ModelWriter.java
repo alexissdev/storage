@@ -34,7 +34,7 @@ public interface ModelWriter<R> {
 	ModelWriter<R> write(String field, Collection<? extends ModelCodec<R>> children);
 
 	default ModelWriter<R> write(
-			String field, Map<?, ? extends ModelCodec<R>> children
+		String field, Map<?, ? extends ModelCodec<R>> children
 	) {
 		return write(field, children.values());
 	}

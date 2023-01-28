@@ -37,8 +37,8 @@ public class RedisCache {
 	}
 
 	public void set(
-			String table, String key,
-			String value, long seconds
+		String table, String key,
+		String value, long seconds
 	) {
 		try (Jedis jedis = jedisPool.getResource()) {
 			String tableName = makeTable(table);

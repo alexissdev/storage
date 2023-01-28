@@ -18,17 +18,17 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLModelService<T extends Model & MapSerializer>
-		extends RemoteModelService<T> {
+	extends RemoteModelService<T> {
 
 	private final Jdbi connection;
 	private final RowMapper<T> rowMapper;
 	private final Table table;
 
 	protected SQLModelService(
-			Executor executor,
-			SQLClient sqlClient,
-			RowMapper<T> rowMapper,
-			Table table
+		Executor executor,
+		SQLClient sqlClient,
+		RowMapper<T> rowMapper,
+		Table table
 	) {
 		super(executor);
 		this.connection = sqlClient.getConnection();
@@ -37,9 +37,9 @@ public class SQLModelService<T extends Model & MapSerializer>
 
 		try (Handle handle = connection.open()) {
 			handle.execute(
-					"CREATE TABLE IF NOT EXISTS "
-					+ table.getName() +
-					" (" + table.getDeclaration() + ")"
+				"CREATE TABLE IF NOT EXISTS "
+				+ table.getName() +
+				" (" + table.getDeclaration() + ")"
 			);
 		}
 	}
@@ -64,11 +64,11 @@ public class SQLModelService<T extends Model & MapSerializer>
 	public List<T> findSync(@NotNull String field, @NotNull String value) {
 		try (Handle handle = connection.open()) {
 			return handle.select("SELECT * FROM <TABLE> WHERE <COLUMN> = :n")
-					       .define("TABLE", table.getName())
-					       .define("COLUMN", field)
-					       .bind("n", value)
-					       .map(rowMapper)
-					       .collect(Collectors.toList());
+				       .define("TABLE", table.getName())
+				       .define("COLUMN", field)
+				       .bind("n", value)
+				       .map(rowMapper)
+				       .collect(Collectors.toList());
 		}
 	}
 
@@ -78,8 +78,8 @@ public class SQLModelService<T extends Model & MapSerializer>
 			List<T> models = new ArrayList<>();
 
 			for (T model : handle.select("SELECT * FROM <TABLE>")
-					               .define("TABLE", table.getName())
-					               .map(rowMapper)
+				               .define("TABLE", table.getName())
+				               .map(rowMapper)
 			) {
 				postLoadAction.accept(model);
 				models.add(model);
@@ -93,11 +93,11 @@ public class SQLModelService<T extends Model & MapSerializer>
 	public void saveSync(@NotNull T model) {
 		try (Handle handle = connection.open()) {
 			handle.createUpdate("REPLACE INTO <TABLE> (<COLUMNS>) VALUES (<VALUES>)")
-					.define("TABLE", table.getName())
-					.define("COLUMNS", table.getColumns())
-					.define("VALUES", table.getParameters())
-					.bindMap(model.toMap())
-					.execute();
+				.define("TABLE", table.getName())
+				.define("COLUMNS", table.getColumns())
+				.define("VALUES", table.getParameters())
+				.bindMap(model.toMap())
+				.execute();
 		}
 	}
 
@@ -105,10 +105,10 @@ public class SQLModelService<T extends Model & MapSerializer>
 	public void deleteSync(@NotNull T model) {
 		try (Handle handle = connection.open()) {
 			handle.createUpdate("DELETE FROM <TABLE> WHERE <COLUMN> = :n")
-					.define("TABLE", table.getName())
-					.define("COLUMN", table.getPrimaryColumn())
-					.bind("n", model.getId())
-					.execute();
+				.define("TABLE", table.getName())
+				.define("COLUMN", table.getPrimaryColumn())
+				.bind("n", model.getId())
+				.execute();
 		}
 	}
 }

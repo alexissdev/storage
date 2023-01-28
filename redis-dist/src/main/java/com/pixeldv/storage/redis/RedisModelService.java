@@ -15,7 +15,8 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class RedisModelService<T extends Model>
-		extends RemoteModelService<T> {
+	extends RemoteModelService<T> {
+
 	private final Gson gson;
 	private final Class<T> type;
 	private final RedisCache redisCache;
@@ -23,10 +24,10 @@ public class RedisModelService<T extends Model>
 	private final int expireAfterSave;
 
 	protected RedisModelService(
-			Executor executor,
-			Class<T> type,
-			Gson gson, RedisCache redisCache,
-			String tableName, int expireAfterSave
+		Executor executor,
+		Class<T> type,
+		Gson gson, RedisCache redisCache,
+		String tableName, int expireAfterSave
 	) {
 		super(executor);
 		this.gson = gson;
@@ -37,7 +38,7 @@ public class RedisModelService<T extends Model>
 	}
 
 	public static <T extends Model> RedisModelServiceBuilder<T> builder(
-			Class<T> type
+		Class<T> type
 	) {
 		return new RedisModelServiceBuilder<>(type);
 	}
@@ -45,9 +46,9 @@ public class RedisModelService<T extends Model>
 	@Override
 	public void saveSync(@NotNull T model) {
 		redisCache.set(
-				tableName, model.getId(),
-				gson.toJson(model),
-				expireAfterSave
+			tableName, model.getId(),
+			gson.toJson(model),
+			expireAfterSave
 		);
 	}
 
@@ -71,7 +72,7 @@ public class RedisModelService<T extends Model>
 	public List<T> findSync(@NotNull String field, @NotNull String value) {
 		if (!field.equals(ModelService.ID_FIELD)) {
 			throw new IllegalArgumentException(
-					"Only ID field is supported for sync find"
+				"Only ID field is supported for sync find"
 			);
 		}
 

@@ -14,15 +14,15 @@ public class ResolverRegistryBuilder<T extends Model> {
 	}
 
 	public ResolverRegistryBuilder<T> register(
-			String name,
-			FieldExtractor<T> extractor
+		String name,
+		FieldExtractor<T> extractor
 	) {
 		return register(name, new RelationalResolver<>(extractor));
 	}
 
 	public ResolverRegistryBuilder<T> register(
-			String name,
-			RelationalResolver<T> resolver
+		String name,
+		RelationalResolver<T> resolver
 	) {
 		resolvers.put(name, resolver);
 		return this;

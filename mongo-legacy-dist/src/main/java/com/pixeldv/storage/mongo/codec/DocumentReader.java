@@ -5,19 +5,14 @@ import com.pixeldv.storage.codec.ModelReader;
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
  * It reads a document and converts it into a Java object
  */
 public class DocumentReader
-		implements ModelReader<Document> {
+	implements ModelReader<Document> {
 
 	private final Document document;
 
@@ -62,8 +57,8 @@ public class DocumentReader
 
 	@Override
 	public <T extends ModelCodec<Document>> @Nullable T readChild(
-			String field,
-			Function<ModelReader<Document>, T> parser
+		String field,
+		Function<ModelReader<Document>, T> parser
 	) {
 		Document child = document.get(field, Document.class);
 
@@ -76,8 +71,8 @@ public class DocumentReader
 
 	@Override
 	public <K, V extends ModelCodec<Document>> Map<K, V> readMap(
-			String field, Function<V, K> keyParser,
-			Function<ModelReader<Document>, V> valueParser
+		String field, Function<V, K> keyParser,
+		Function<ModelReader<Document>, V> valueParser
 	) {
 		List<Document> documents = readList(field, Document.class);
 		Map<K, V> map = new HashMap<>(documents.size());
@@ -93,15 +88,15 @@ public class DocumentReader
 
 	@Override
 	public <T extends ModelCodec<Document>> Set<T> readChildren(
-			String field,
-			Function<ModelReader<Document>, T> parser
+		String field,
+		Function<ModelReader<Document>, T> parser
 	) {
 		Set<T> children = new HashSet<>();
 		List<Document> documents = readList(field, Document.class);
 
 		for (Document document : documents) {
 			children.add(parser.apply(
-					DocumentReader.create(document)
+				DocumentReader.create(document)
 			));
 		}
 

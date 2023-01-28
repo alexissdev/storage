@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class YamlReader
-		implements ModelReader<Map<String, Object>> {
+	implements ModelReader<Map<String, Object>> {
 
 	private final ConfigurationSection parentSection;
 
@@ -63,11 +63,11 @@ public class YamlReader
 
 	@Override
 	public <T extends ModelCodec<Map<String, Object>>> @Nullable T readChild(
-			String field,
-			Function<ModelReader<Map<String, Object>>, T> parser
+		String field,
+		Function<ModelReader<Map<String, Object>>, T> parser
 	) {
 		ConfigurationSection section = parentSection
-				                               .getConfigurationSection(field);
+			                               .getConfigurationSection(field);
 
 		if (section == null) {
 			return null;
@@ -78,11 +78,11 @@ public class YamlReader
 
 	@Override
 	public <K, V extends ModelCodec<Map<String, Object>>> Map<K, V> readMap(
-			String field, Function<V, K> keyParser,
-			Function<ModelReader<Map<String, Object>>, V> valueParser
+		String field, Function<V, K> keyParser,
+		Function<ModelReader<Map<String, Object>>, V> valueParser
 	) {
 		ConfigurationSection section =
-				parentSection.getConfigurationSection(field);
+			parentSection.getConfigurationSection(field);
 
 		if (section == null) {
 			return Collections.emptyMap();
@@ -92,7 +92,7 @@ public class YamlReader
 		Map<K, V> map = new HashMap<>(keys.size());
 		for (String key : keys) {
 			V value = valueParser.apply(new YamlReader(
-					section.getConfigurationSection(key)
+				section.getConfigurationSection(key)
 			));
 
 			map.put(keyParser.apply(value), value);
@@ -103,11 +103,11 @@ public class YamlReader
 
 	@Override
 	public <T extends ModelCodec<Map<String, Object>>> Set<T> readChildren(
-			String field,
-			Function<ModelReader<Map<String, Object>>, T> parser
+		String field,
+		Function<ModelReader<Map<String, Object>>, T> parser
 	) {
 		ConfigurationSection section =
-				parentSection.getConfigurationSection(field);
+			parentSection.getConfigurationSection(field);
 
 		if (section == null) {
 			return Collections.emptySet();
@@ -118,7 +118,7 @@ public class YamlReader
 
 		for (String key : keys) {
 			children.add(parser.apply(new YamlReader(
-					section.getConfigurationSection(key)
+				section.getConfigurationSection(key)
 			)));
 		}
 

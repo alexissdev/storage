@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class DelegateObjectModelWriter<R>
-		implements ModelWriter<R> {
+	implements ModelWriter<R> {
 
 	@Override
 	public ModelWriter<R> write(String field, UUID uuid) {

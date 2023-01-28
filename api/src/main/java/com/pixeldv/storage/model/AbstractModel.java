@@ -1,7 +1,7 @@
 package com.pixeldv.storage.model;
 
 public abstract class AbstractModel
-		implements Model {
+	implements Model {
 
 	private final String id;
 

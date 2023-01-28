@@ -18,15 +18,15 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class MongoModelService<T extends Model & DocumentCodec>
-		extends RemoteModelService<T> {
+	extends RemoteModelService<T> {
 
 	private final MongoCollection<Document> mongoCollection;
 	private final MongoModelParser<T> mongoModelParser;
 
 	protected MongoModelService(
-			Executor executor,
-			MongoCollection<Document> mongoCollection,
-			MongoModelParser<T> mongoModelParser
+		Executor executor,
+		MongoCollection<Document> mongoCollection,
+		MongoModelParser<T> mongoModelParser
 	) {
 		super(executor);
 
@@ -41,8 +41,8 @@ public class MongoModelService<T extends Model & DocumentCodec>
 	@Override
 	public @Nullable T findSync(@NotNull String id) {
 		Document document = mongoCollection
-				                    .find(Filters.eq("_id", id))
-				                    .first();
+			                    .find(Filters.eq("_id", id))
+			                    .first();
 
 		if (document == null) {
 			return null;
@@ -56,10 +56,10 @@ public class MongoModelService<T extends Model & DocumentCodec>
 		List<T> models = new ArrayList<>();
 
 		for (Document document : mongoCollection
-				                         .find(Filters.eq(field, value))) {
+			                         .find(Filters.eq(field, value))) {
 			models.add(mongoModelParser
-					           .parse(DocumentReader
-							                  .create(document)));
+				           .parse(DocumentReader
+					                  .create(document)));
 		}
 
 		return models;
@@ -68,13 +68,13 @@ public class MongoModelService<T extends Model & DocumentCodec>
 	@Override
 	public List<T> findAllSync(@NotNull Consumer<T> postLoadAction) {
 		List<Document> documents = mongoCollection.find()
-				                           .into(new ArrayList<>());
+			                           .into(new ArrayList<>());
 
 		List<T> models = new ArrayList<>();
 
 		for (Document document : documents) {
 			T model = mongoModelParser.parse(
-					DocumentReader.create(document)
+				DocumentReader.create(document)
 			);
 			postLoadAction.accept(model);
 			models.add(model);
@@ -86,9 +86,9 @@ public class MongoModelService<T extends Model & DocumentCodec>
 	@Override
 	public void saveSync(@NotNull T model) {
 		mongoCollection.replaceOne(
-				Filters.eq("_id", model.getId()),
-				model.serialize(),
-				new ReplaceOptions().upsert(true)
+			Filters.eq("_id", model.getId()),
+			model.serialize(),
+			new ReplaceOptions().upsert(true)
 		);
 	}
 

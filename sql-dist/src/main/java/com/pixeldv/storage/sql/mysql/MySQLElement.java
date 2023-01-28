@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MySQLElement
-		implements SQLElement {
+	implements SQLElement {
 
 	private final String column;
 	private final DataType type;
@@ -19,9 +19,9 @@ public class MySQLElement
 	private ForeignKey foreignKey;
 
 	public MySQLElement(
-			String column, DataType type,
-			ForeignKey foreignKey,
-			SQLConstraint... constraints
+		String column, DataType type,
+		ForeignKey foreignKey,
+		SQLConstraint... constraints
 	) {
 		this.column = column;
 		this.type = type;
@@ -64,14 +64,14 @@ public class MySQLElement
 		StringBuilder builder = new StringBuilder();
 
 		builder
-				.append(column)
-				.append(" ")
-				.append(type.getSql())
-				.append(" ");
+			.append(column)
+			.append(" ")
+			.append(type.getSql())
+			.append(" ");
 
 		constraints.forEach(constraint -> builder
-				                                  .append(constraint.toSql())
-				                                  .append(" "));
+			                                  .append(constraint.toSql())
+			                                  .append(" "));
 
 		if (hasReference()) {
 			builder.append(foreignKey.toSql());
@@ -113,10 +113,10 @@ public class MySQLElement
 		private final ForeignAction action;
 
 		public ForeignKey(
-				String tableReference,
-				String elementReference,
-				ForeignTrigger trigger,
-				ForeignAction action
+			String tableReference,
+			String elementReference,
+			ForeignTrigger trigger,
+			ForeignAction action
 		) {
 			this.tableReference = tableReference;
 			this.elementReference = elementReference;
@@ -126,8 +126,8 @@ public class MySQLElement
 
 		public String toSql() {
 			return String.format(
-					TEMPLATE, tableReference, elementReference,
-					trigger.sql, action.sql
+				TEMPLATE, tableReference, elementReference,
+				trigger.sql, action.sql
 			);
 		}
 	}

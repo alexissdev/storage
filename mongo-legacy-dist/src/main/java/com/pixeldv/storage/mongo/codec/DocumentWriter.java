@@ -9,7 +9,7 @@ import org.bson.Document;
  * It's a builder for documents
  */
 public class DocumentWriter
-		extends DelegateObjectModelWriter<Document> {
+	extends DelegateObjectModelWriter<Document> {
 
 	private final Document document;
 
@@ -23,16 +23,16 @@ public class DocumentWriter
 
 	public static ModelWriter<Document> create(Model model) {
 		return new DocumentWriter()
-				       .write("_id", model.getId());
+			       .write("_id", model.getId());
 	}
 
 	/**
 	 * It adds a field to the document.
 	 *
 	 * @param field
-	 * 		The name of the field to be added to the document.
+	 * 	The name of the field to be added to the document.
 	 * @param value
-	 * 		The value to be written.
+	 * 	The value to be written.
 	 *
 	 * @return Nothing.
 	 */

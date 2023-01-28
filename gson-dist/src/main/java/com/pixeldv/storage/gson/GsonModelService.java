@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class GsonModelService<T extends Model>
-		extends RemoteModelService<T> {
+	extends RemoteModelService<T> {
 
 	public static <T extends Model> GsonModelServiceBuilder<T> builder(Class<T> type) {
 		return new GsonModelServiceBuilder<>(type);
@@ -29,8 +29,8 @@ public class GsonModelService<T extends Model>
 	private final File folder;
 
 	protected GsonModelService(
-			Executor executor, Gson gson,
-			Class<T> type, File folder
+		Executor executor, Gson gson,
+		Class<T> type, File folder
 	) {
 		super(executor);
 		this.gson = gson;
@@ -47,7 +47,7 @@ public class GsonModelService<T extends Model>
 	public List<T> findSync(@NotNull String field, @NotNull String value) {
 		if (!field.equals(ModelService.ID_FIELD)) {
 			throw new IllegalArgumentException(
-					"Only ID field is supported for sync find"
+				"Only ID field is supported for sync find"
 			);
 		}
 

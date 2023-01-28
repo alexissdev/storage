@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MySQLTable
-		implements Table {
+	implements Table {
 
 	private final String tableName;
 
@@ -19,8 +19,8 @@ public class MySQLTable
 	private final String declaration;
 
 	public MySQLTable(
-			String tableName,
-			List<SQLElement> elements
+		String tableName,
+		List<SQLElement> elements
 	) {
 		this.tableName = tableName;
 
@@ -44,8 +44,8 @@ public class MySQLTable
 	}
 
 	public MySQLTable(
-			String tableName,
-			SQLElement... elements
+		String tableName,
+		SQLElement... elements
 	) {
 		this(tableName, Arrays.asList(elements));
 	}

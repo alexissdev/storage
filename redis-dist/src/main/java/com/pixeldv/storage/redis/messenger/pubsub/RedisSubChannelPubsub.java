@@ -10,7 +10,7 @@ import redis.clients.jedis.JedisPubSub;
 import java.util.Map;
 
 public class RedisSubChannelPubsub
-		extends JedisPubSub {
+	extends JedisPubSub {
 
 	private final String parentChannel;
 	private final String serverId;
@@ -18,9 +18,9 @@ public class RedisSubChannelPubsub
 	private final Map<String, RedisChannel<?>> channels;
 
 	public RedisSubChannelPubsub(
-			String parentChannel, String serverId,
-			Gson gson,
-			Map<String, RedisChannel<?>> channels
+		String parentChannel, String serverId,
+		Gson gson,
+		Map<String, RedisChannel<?>> channels
 	) {
 		this.parentChannel = parentChannel;
 		this.serverId = serverId;
@@ -37,9 +37,10 @@ public class RedisSubChannelPubsub
 
 		// we can parse the message as a json object
 		JsonObject jsonMessage = JsonParser.parseString(message)
-				                         .getAsJsonObject();
+			                         .getAsJsonObject();
 
-		String serverId = jsonMessage.get("server").getAsString();
+		String serverId = jsonMessage.get("server")
+			                  .getAsString();
 
 		// if the message is from the server we're listening to
 		if (serverId.equals(this.serverId)) {
@@ -57,11 +58,12 @@ public class RedisSubChannelPubsub
 			}
 		}
 
-		String subChannel = jsonMessage.get("channel").getAsString();
+		String subChannel = jsonMessage.get("channel")
+			                    .getAsString();
 
 		@SuppressWarnings("unchecked")
 		RedisChannel<Object> channelObject =
-				(RedisChannel<Object>) channels.get(subChannel);
+			(RedisChannel<Object>) channels.get(subChannel);
 
 		// if the channel doesn't exist, we can't do anything
 		if (channelObject == null) {
@@ -70,8 +72,9 @@ public class RedisSubChannelPubsub
 
 		JsonElement object = jsonMessage.get("object");
 		Object deserializedObject = gson.fromJson(
-				object,
-				channelObject.getType().getType()
+			object,
+			channelObject.getType()
+				.getType()
 		);
 
 		channelObject.listen(serverId, deserializedObject);

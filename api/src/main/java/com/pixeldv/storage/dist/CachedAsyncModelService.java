@@ -9,8 +9,9 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public abstract class CachedAsyncModelService<T extends Model>
-		extends AsyncModelService<T>
-		implements CachedModelService<T> {
+	extends AsyncModelService<T>
+	implements CachedModelService<T> {
+
 	public CachedAsyncModelService(Executor executor) {
 		super(executor);
 	}

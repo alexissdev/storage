@@ -10,7 +10,7 @@ import com.pixeldv.storage.util.Validate;
 import java.io.File;
 
 public class GsonModelServiceBuilder<T extends Model>
-		extends LayoutModelServiceBuilder<T, GsonModelServiceBuilder<T>> {
+	extends LayoutModelServiceBuilder<T, GsonModelServiceBuilder<T>> {
 
 	private Gson gson;
 	private File folder;
@@ -41,22 +41,23 @@ public class GsonModelServiceBuilder<T extends Model>
 		Validate.notNull(folder, "folder");
 
 		if (!folder.exists()) {
-			Validate.state(folder.mkdirs(),
-			               "Failed to create folder: "
-			               + folder.getName());
+			Validate.state(
+				folder.mkdirs(),
+				"Failed to create folder: "
+				+ folder.getName());
 		}
 
 		ModelService<T> modelService = new GsonModelService<>(
-				executor, gson,
-				type, folder
+			executor, gson,
+			type, folder
 		);
 
 		if (cacheModelService == null) {
 			return modelService;
 		} else {
 			return new DelegatedCachedModelService<>(
-					executor, cacheModelService,
-					resolverRegistry, modelService
+				executor, cacheModelService,
+				resolverRegistry, modelService
 			);
 		}
 	}
